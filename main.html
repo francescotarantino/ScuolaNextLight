@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="ScuolaNext Light">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>ScuolaNext Light</title>
+
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <meta name="theme-color" content="#F44336">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <meta name="msapplication-navbutton-color" content="#F44336">
+
+  <meta name="apple-mobile-web-app-status-bar-style" content="#F44336">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="ScuolaNext Light">
+  <link rel="apple-touch-icon-precomposed" href="images/icon_round.png">
+
+  <link rel="shortcut icon" href="images/icon_round.png">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.red-yellow.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/dialog-polyfill@latest/dialog-polyfill.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
+
+  <script>
+  if (!Cookies.get('session')) {
+    window.location.replace("/login.html");
+  }
+  </script>
+</head>
+<body>
+  <dialog class="mdl-dialog" id="logoutDialog">
+    <div class="mdl-dialog__content">
+      <h6>
+        Sei sicuro di voler uscire?
+      </h6>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button type="button" class="mdl-button yes">Si</button>
+      <button type="button" class="mdl-button close">No</button>
+    </div>
+  </dialog>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <!--<span class="mdl-layout-title">ScuolaNext Light</span>-->
+        <div class="mdl-layout-spacer"></div>
+        <nav class="mdl-navigation">
+          <button id="update"
+          class="mdl-button mdl-js-button mdl-button--icon button-nav">
+          <i class="material-icons">update</i>
+        </button>
+        <div class="mdl-tooltip" data-mdl-for="update">
+          Aggiorna
+        </div>
+
+        <button id="menu-lower-right"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">more_vert</i>
+      </button>
+
+      <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+      for="menu-lower-right">
+      <li class="mdl-menu__item">Info</li>
+      <li class="mdl-menu__item">Contattami</li>
+      <li id="logout" class="mdl-menu__item" onclick="logoutDialog()">Logout</li>
+    </ul>
+  </nav>
+</div>
+</header>
+<div class="mdl-layout__drawer">
+  <span class="mdl-layout-title">ScuolaNext Light</span>
+  <nav class="mdl-navigation">
+    <a class="mdl-navigation__link" href="/main.html"><i class="material-icons nav-icons" role="presentation">home</i>Home</a>
+  </nav>
+</div>
+<main class="mdl-layout__content mdl-color--grey-100">
+  <div class="page-content">
+    <div class="mdl-grid main-content">
+      <div class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
+        <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+          <div class="mdl-tabs__tab-bar">
+            <a href="#voti" class="mdl-tabs__tab is-active">Voti</a>
+          </div>
+
+          <div class="mdl-tabs__panel is-active" id="voti">
+            <ul>
+              <li>Test</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
+        <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
+          <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+            <div class="mdl-tabs__tab-bar">
+              <a href="#professori" class="mdl-tabs__tab is-active">Professori</a>
+            </div>
+
+            <div class="mdl-tabs__panel is-active" id="professori">
+              <ul class="mdl-list" style="margin: 0px; margin-left: 4px;">
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a href="https://github.com/franci22" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-button--accent">Vedi Sorgente</a>
+</main>
+</div>
+<script src="https://unpkg.com/dialog-polyfill@latest/dialog-polyfill.js"></script>
+<script src="js/functions.js"></script>
+<script src="js/main.js"></script>
+<script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+</body>
+</html>
