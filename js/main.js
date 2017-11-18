@@ -4,6 +4,7 @@ var alunno;
 
 $(function(){
   updateMain();
+  settingsInit();
 });
 
 function updateMain(){
@@ -36,18 +37,37 @@ function logout() {
   window.location.replace("login.html");
 }
 
-function logoutDialog() {
-  logoutDialogElement.showModal();
+function settingsInit() {
+  if (Cookies.get('view-source-hidden')) {
+    $("#switch-view-source-hidden").attr("checked", true);
+  }
 }
 
-var logoutDialogElement = document.querySelector('#logoutDialog');
+$('#switch-view-source-hidden').click(function() {
+  if (this.checked) {
+    Cookies.set("view-source-hidden", true, { expires: 365 });
+  } else {
+    Cookies.remove("view-source-hidden");
+  }
+  $("#view-source").attr("hidden", this.checked);
+});
+
+var logoutDialogElement = $('#logoutDialog')[0];
 if (!logoutDialogElement.showModal) {
   dialogPolyfill.registerDialog(logoutDialogElement);
 }
-logoutDialogElement.querySelector('.close').addEventListener('click', function() {
+$('#logoutDialog .close')[0].addEventListener('click', function() {
   logoutDialogElement.close();
 });
-logoutDialogElement.querySelector('.yes').addEventListener('click', function() {
+$('#logoutDialog .yes')[0].addEventListener('click', function() {
   logoutDialogElement.close();
   logout();
+});
+
+var settingsDialogElement = $('#settingsDialog')[0];
+if (!settingsDialogElement.showModal) {
+  dialogPolyfill.registerDialog(settingsDialogElement);
+}
+$('#settingsDialog .close')[0].addEventListener('click', function() {
+  settingsDialogElement.close();
 });

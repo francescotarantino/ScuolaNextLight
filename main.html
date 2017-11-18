@@ -36,6 +36,11 @@
   if (!Cookies.get('session')) {
     window.location.replace("login.html");
   }
+  $(function () {
+  if (!Cookies.get('view-source-hidden')) {
+      $("#view-source").attr("hidden", false);
+    }
+  });
   </script>
 </head>
 <body>
@@ -50,13 +55,25 @@
       <button type="button" class="mdl-button close">No</button>
     </div>
   </dialog>
+  <dialog class="mdl-dialog" id="settingsDialog">
+    <h4 class="mdl-dialog__title">Opzioni</h4>
+    <div class="mdl-dialog__content">
+      <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-view-source-hidden">
+        <input type="checkbox" id="switch-view-source-hidden" class="mdl-switch__input">
+        <span class="mdl-switch__label">Nascondi "Vedi Sorgente"</span>
+      </label>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button type="button" class="mdl-button close">Chiudi</button>
+    </div>
+  </dialog>
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
         <!--<span class="mdl-layout-title">ScuolaNext Light</span>-->
         <div class="mdl-layout-spacer"></div>
         <nav class="mdl-navigation">
-          <button id="update"
+        <button id="update"
           class="mdl-button mdl-js-button mdl-button--icon button-nav">
           <i class="material-icons">update</i>
         </button>
@@ -71,9 +88,10 @@
 
       <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
       for="menu-lower-right">
+      <li class="mdl-menu__item" onclick="settingsDialogElement.showModal();">Opzioni</li>
+      <li id="logout" class="mdl-menu__item mdl-menu__item--full-bleed-divider" onclick="logoutDialogElement.showModal();">Logout</li>
       <li class="mdl-menu__item">Info</li>
-      <li class="mdl-menu__item">Contattami</li>
-      <li id="logout" class="mdl-menu__item" onclick="logoutDialog()">Logout</li>
+      <li class="mdl-menu__item" onclick="window.open('https://franci22.ml/contact.html')">Contattami</li>
     </ul>
   </nav>
 </div>
@@ -116,7 +134,7 @@
       </div>
     </div>
   </div>
-  <a href="https://github.com/franci22" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-button--accent">Vedi Sorgente</a>
+  <a href="https://github.com/franci22/ScuolaNextLight" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-button--accent" hidden="hidden">Vedi Sorgente</a>
 </main>
 </div>
 <script src="https://unpkg.com/dialog-polyfill@latest/dialog-polyfill.js"></script>
