@@ -33,7 +33,7 @@ function fillProfessori() {
 
 function logout() {
   Cookies.remove('session');
-  window.location.replace("/login.html");
+  window.location.replace("login.html");
 }
 
 function logoutDialog() {

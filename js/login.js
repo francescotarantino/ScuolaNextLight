@@ -32,7 +32,7 @@ function doLogin(){
         } else {
           Cookies.set('session', session);
         }
-        window.location.replace("/main.html");
+        window.location.replace("main.html");
       } else {
         $("#loginbtn").prop("disabled",false);
         $("#p1").hide();
