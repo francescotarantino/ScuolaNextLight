@@ -8,16 +8,20 @@ $(function(){
 });
 
 function updateMain(){
-  if (!Cookies.get("alunno")) {
-    updateAlunno(session.token, codicescuola);
+  var fill = function () {
+    alunno = Cookies.getJSON("alunno");
+    fillProfessori();
+    fillVoti();
   }
-  alunno = Cookies.getJSON("alunno");
-  fillProfessori();
-  fillVoti();
+  if (!Cookies.get("alunno")) {
+    updateAlunno(session.token, codicescuola).then(fill);
+  } else {
+    fill();
+  }
 }
 
 function fillVoti() {
-
+  
 }
 
 function fillProfessori() {

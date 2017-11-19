@@ -18,7 +18,10 @@ function request(req, headers, callback){
 }
 
 function updateAlunno (token, codicescuola){
+  var dfd = $.Deferred();
   request("schede", { 'x-cod-min': codicescuola, 'x-auth-token': token }, function () {
     Cookies.set("alunno", this.responseText);
+    dfd.resolve();
   });
+  return dfd.promise();
 }
