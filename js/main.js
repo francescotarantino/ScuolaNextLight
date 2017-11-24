@@ -25,6 +25,8 @@ function fillVoti() {
 }
 
 function fillProfessori() {
+  $("#professori ul").empty();
+  $("#professori-loading").show();
   request("docenticlasse", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola }, function () {
     var professori = JSON.parse(this.responseText);
     var professori_ul = $("#professori ul");
@@ -33,6 +35,7 @@ function fillProfessori() {
       var row = '<li class="mdl-list__item mdl-list__item--two-line"><span class="mdl-list__item-primary-content">' + icon_html +' ' + element.docente.nome + ' ' + element.docente.cognome + '<span class="mdl-list__item-sub-title">' + element.materie + '</span></span></li>';
       professori_ul.append(row);
     });
+    $("#professori-loading").hide();
   });
 }
 
