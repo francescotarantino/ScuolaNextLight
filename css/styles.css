@@ -30,3 +30,35 @@ html, body {
   margin-bottom: 40px;
   z-index: 900;
 }
+
+.home-cards{
+  width: 100%;
+}
+
+.oggi-text {
+  padding: 16px;
+}
+
+.oggi-text:not(:last-child) {
+  border-bottom: 1px solid rgba(0,0,0,.13);
+}
+
+.oggi-text>.materia{
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: .04em;
+  line-height: 16px;
+  cursor: default;
+  color: rgba(0,0,0,.87);
+}
+
+.oggi-text>.info{
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 18px;
+  color: rgba(0,0,0,.54);
+  display: block;
+  padding: 0;
+}

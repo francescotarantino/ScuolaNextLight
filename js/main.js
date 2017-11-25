@@ -10,7 +10,8 @@ $(function(){
 function updateMain(){
   var fill = function () {
     alunno = Cookies.getJSON("alunno");
-    fillProfessori();
+    fillOggi($.format.date(new Date(), "yyyy-MM-dd"));
+    //fillProfessori();
     fillVoti();
   }
   if (!Cookies.get("alunno")) {
@@ -20,8 +21,53 @@ function updateMain(){
   }
 }
 
+function fillOggi(day) {
+  var argomenti_ul = $("#argomenti-lezione");
+  var compiti_ul = $("#compiti-assegnati");
+  var voti_ul = $("#voti-giornalieri");
+  argomenti_ul.empty();
+  $("#argomenti-loading").show();
+  compiti_ul.empty();
+  $("#compiti-loading").show();
+  voti_ul.empty();
+  $("#voti-loading").show();
+
+  var i_argomenti = 0, i_compiti = 0, i_voti = 0;
+  request("oggi", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola }, function () {
+    var oggi = JSON.parse(this.responseText);
+    console.log(oggi);
+    oggi.dati.forEach(function (element) {
+      if (element.tipo == "ARG") {
+        i_argomenti++;
+        var row = '<div class="oggi-text"><span class="materia">' + element.dati.desMateria + '</span><span class="info">' + element.dati.desArgomento + '<br />' + element.dati.docente + '</span></div>';
+        argomenti_ul.append(row);
+      } else if (element.tipo == "COM") {
+        i_compiti++;
+        var row = '<div class="oggi-text"><span class="materia">' + element.dati.desMateria + '</span><span class="info">' + element.dati.desCompiti + '<br />' + element.dati.docente + '</span></div>';
+        compiti_ul.append(row);
+      } else if (element.tipo == "VOT") {
+        i_voti++;
+      }
+    });
+
+    if (i_voti == 0) {
+      voti_ul.append("<h6>Nessun voto.</h5>");
+    }
+    if (i_argomenti == 0) {
+      voti_ul.append("<h6>Nessun argomento.</h5>");
+    }
+    if (i_compiti == 0) {
+      voti_ul.append("<h6>Nessun compito.</h5>");
+    }
+
+    $("#argomenti-loading").hide();
+    $("#compiti-loading").hide();
+    $("#voti-loading").hide();
+  }, { 'datGiorno': day });
+}
+
 function fillVoti() {
-  
+
 }
 
 function fillProfessori() {

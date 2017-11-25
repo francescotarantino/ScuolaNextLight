@@ -30,6 +30,7 @@
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js"></script>
 
   <script>
@@ -100,39 +101,63 @@
   <span class="mdl-layout-title">ScuolaNext Light</span>
   <nav class="mdl-navigation">
     <a class="mdl-navigation__link" href="/main.html"><i class="material-icons nav-icons" role="presentation">home</i>Home</a>
+    <a class="mdl-navigation__link" href="/main.html"><i class="material-icons nav-icons" role="presentation">school</i>Classe</a>
   </nav>
 </div>
 <main class="mdl-layout__content mdl-color--grey-100">
   <div class="page-content">
     <div class="mdl-grid main-content">
-      <div class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
-        <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-          <div class="mdl-tabs__tab-bar">
-            <a href="#voti" class="mdl-tabs__tab is-active">Voti</a>
+      <!-- Argomenti lezione -->
+      <div class="mdl-cell mdl-cell--4-col">
+        <div class="mdl-card mdl-shadow--2dp home-cards">
+          <div class="mdl-card__title" style="color: #fff; background: #3E4EB8;">
+            <h2 class="mdl-card__title-text">Argomenti lezione</h2>
           </div>
+          <div class="mdl-card__supporting-text">
+            <div id="argomenti-lezione">
 
-          <div class="mdl-tabs__panel is-active" id="voti">
-            <ul>
-              <li>Test</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
-        <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
-          <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-            <div class="mdl-tabs__tab-bar">
-              <a href="#professori" class="mdl-tabs__tab is-active">Professori</a>
             </div>
 
-            <div class="mdl-tabs__panel is-active" id="professori">
-              <ul class="mdl-list" style="margin: 0px; margin-left: 4px;">
-              </ul>
-            </div>
           </div>
-          <div id="professori-loading" class="mdl-spinner mdl-js-spinner is-active" style="align-self: center; vertical-align: middle;"></div>
+          <div id="argomenti-loading" class="mdl-spinner mdl-js-spinner is-active" style="align-self: center; vertical-align: middle; margin-top: 16px;"></div>
         </div>
       </div>
+      <!--/ Argomenti lezione -->
+
+      <!-- Compiti assegnati  -->
+      <div class="mdl-cell mdl-cell--4-col">
+        <div class="mdl-card mdl-shadow--2dp home-cards">
+          <div class="mdl-card__title" style="color: #fff; background: #4caf50;">
+            <h2 class="mdl-card__title-text">Compiti assegnati</h2>
+          </div>
+          <div class="mdl-card__supporting-text">
+            <div id="compiti-assegnati">
+
+            </div>
+
+          </div>
+          <div id="compiti-loading" class="mdl-spinner mdl-js-spinner is-active" style="align-self: center; vertical-align: middle; margin-top: 16px;"></div>
+        </div>
+      </div>
+      <!--/ Compiti assegnati -->
+
+      <!-- Voti giornalieri  -->
+      <div class="mdl-cell mdl-cell--4-col">
+        <div class="mdl-card mdl-shadow--2dp home-cards">
+          <div class="mdl-card__title" style="color: #fff; background: #FF3D00;">
+            <h2 class="mdl-card__title-text">Voti giornalieri</h2>
+          </div>
+          <div class="mdl-card__supporting-text">
+            <div id="voti-giornalieri">
+
+            </div>
+
+          </div>
+          <div id="voti-loading" class="mdl-spinner mdl-js-spinner is-active" style="align-self: center; vertical-align: middle; margin-top: 16px;"></div>
+        </div>
+      </div>
+      <!--/ Voti giornalieri -->
+
     </div>
   </div>
   <a href="https://github.com/franci22/ScuolaNextLight" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-button--accent" hidden="hidden">Vedi Sorgente</a>
