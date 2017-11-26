@@ -35,7 +35,6 @@ function fillOggi(day) {
   var i_argomenti = 0, i_compiti = 0, i_voti = 0;
   request("oggi", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola }, function () {
     var oggi = JSON.parse(this.responseText);
-    console.log(oggi);
     oggi.dati.forEach(function (element) {
       if (element.tipo == "ARG") {
         i_argomenti++;
@@ -47,6 +46,11 @@ function fillOggi(day) {
         compiti_ul.append(row);
       } else if (element.tipo == "VOT") {
         i_voti++;
+        if (element.dati.desCommento == "") {
+          element.dati.desCommento = "Nessun commento.";
+        }
+        var row = '<div class="oggi-text"><span class="materia">' + element.dati.desMateria + ' <span class="mdl-chip chip-voto mdl-color--red mdl-color-text--white"><span class="mdl-chip__text">' + element.dati.codVoto + '</span></span></span><span class="info">' + element.dati.desCommento + '<br />' + element.dati.docente + '</span></div>';
+        voti_ul.append(row);
       }
     });
 
