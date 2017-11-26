@@ -68,6 +68,9 @@
       <button type="button" class="mdl-button close">Chiudi</button>
     </div>
   </dialog>
+  <dialog class="mdl-dialog datepicker-dialog" id="dateDialog">
+      <div id="oggi-datepicker" class="mdl-datepicker mdl-js-datepicker mdl-datepicker--inline is-visible"></div>
+  </dialog>
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
@@ -81,7 +84,7 @@
           <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="select-date">
             <li class="mdl-menu__item" onclick="fillOggi($.format.date(new Date(), 'yyyy-MM-dd'));">Oggi</li>
             <li class="mdl-menu__item" onclick="fillOggi($.format.date((function(d){ d.setDate(d.getDate()-1); return d})(new Date), 'yyyy-MM-dd'));">Ieri</li>
-            <li class="mdl-menu__item" onclick="">Scegli data</li>
+            <li class="mdl-menu__item" onclick="oggiDatepickerDialogElement.showModal();">Scegli data</li>
           </ul>
           <button id="update" class="mdl-button mdl-js-button mdl-button--icon button-nav">
             <i class="material-icons">update</i>

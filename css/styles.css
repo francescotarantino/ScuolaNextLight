@@ -18,7 +18,6 @@ html, body {
 
 .main-content {
   max-width: 1080px;
-  justify-content: center;
 }
 
 #view-source {
@@ -65,4 +64,10 @@ html, body {
 
 .chip-voto {
   display: inline-grid;
+}
+
+.datepicker-dialog {
+  padding: 0;
+  background: none;
+  box-shadow: none;
 }

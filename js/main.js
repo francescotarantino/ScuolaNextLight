@@ -5,6 +5,34 @@ var alunno;
 $(function(){
   updateMain();
   settingsInit();
+
+  MaterialDatePicker.locales.weekStart = 1;
+  MaterialDatePicker.locales.weekDays = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+  MaterialDatePicker.locales.weekDaysShort = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
+  MaterialDatePicker.locales.weekDaysLetter = ['D', 'L', 'M', 'M', 'G', 'V', 'S'];
+  MaterialDatePicker.locales.months = [
+    'Gennaio', 'Febbraio', 'Marzo',
+    'Aprile', 'Maggio', 'Giugno', 'Luglio',
+    'Agosto', 'Settembre', 'Ottobre',
+    'Novembre', 'Dicembre'
+  ];
+  MaterialDatePicker.locales.monthsShort = [
+    'Gen', 'Feb', 'Mar', 'Apr', 'Mag',
+    'Giu', 'Lug', 'Ago', 'Set', 'Ott',
+    'Nov', 'Dic'
+  ];
+  MaterialDatePicker.locales.actions.cancel = "Annulla";
+
+  var oggiPicker = document.querySelector('#oggi-datepicker');
+  oggiPicker.MaterialDatePicker.setRange(null, new Date());
+  oggiPicker.addEventListener('change', function(e) {
+    oggiDatepickerDialogElement.close();
+    var selectedDate = oggiPicker.MaterialDatePicker.getSelectedDate();
+    fillOggi($.format.date(selectedDate, "yyyy-MM-dd"));
+  });
+  oggiPicker.addEventListener('cancel', function() {
+    oggiDatepickerDialogElement.close();
+  });
 });
 
 function updateMain(){
@@ -128,3 +156,8 @@ if (!settingsDialogElement.showModal) {
 $('#settingsDialog .close')[0].addEventListener('click', function() {
   settingsDialogElement.close();
 });
+
+var oggiDatepickerDialogElement = $('#dateDialog')[0];
+if (!oggiDatepickerDialogElement.showModal) {
+  dialogPolyfill.registerDialog(oggiDatepickerDialogElement);
+}
