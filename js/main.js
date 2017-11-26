@@ -54,10 +54,10 @@ function fillOggi(day) {
       voti_ul.append("<h6>Nessun voto.</h5>");
     }
     if (i_argomenti == 0) {
-      voti_ul.append("<h6>Nessun argomento.</h5>");
+      argomenti_ul.append("<h6>Nessun argomento.</h5>");
     }
     if (i_compiti == 0) {
-      voti_ul.append("<h6>Nessun compito.</h5>");
+      compiti_ul.append("<h6>Nessun compito.</h5>");
     }
 
     $("#argomenti-loading").hide();
