@@ -38,7 +38,7 @@
     window.location.replace("login.html");
   }
   $(function () {
-  if (!Cookies.get('view-source-hidden')) {
+    if (!Cookies.get('view-source-hidden')) {
       $("#view-source").attr("hidden", false);
     }
   });
@@ -74,94 +74,100 @@
         <!--<span class="mdl-layout-title">ScuolaNext Light</span>-->
         <div class="mdl-layout-spacer"></div>
         <nav class="mdl-navigation">
-        <button id="update"
-          class="mdl-button mdl-js-button mdl-button--icon button-nav">
-          <i class="material-icons">update</i>
-        </button>
-        <div class="mdl-tooltip" data-mdl-for="update">
-          Aggiorna
-        </div>
 
-        <button id="menu-lower-right"
-        class="mdl-button mdl-js-button mdl-button--icon">
-        <i class="material-icons">more_vert</i>
-      </button>
-
-      <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
-      for="menu-lower-right">
-      <li class="mdl-menu__item" onclick="settingsDialogElement.showModal();">Opzioni</li>
-      <li id="logout" class="mdl-menu__item mdl-menu__item--full-bleed-divider" onclick="logoutDialogElement.showModal();">Logout</li>
-      <li class="mdl-menu__item">Info</li>
-      <li class="mdl-menu__item" onclick="window.open('https://franci22.ml/contact.html')">Contattami</li>
-    </ul>
-  </nav>
-</div>
-</header>
-<div class="mdl-layout__drawer">
-  <span class="mdl-layout-title">ScuolaNext Light</span>
-  <nav class="mdl-navigation">
-    <a class="mdl-navigation__link" href="/main.html"><i class="material-icons nav-icons" role="presentation">home</i>Home</a>
-    <a class="mdl-navigation__link" href="/main.html"><i class="material-icons nav-icons" role="presentation">school</i>Classe</a>
-  </nav>
-</div>
-<main class="mdl-layout__content mdl-color--grey-100">
-  <div class="page-content">
-    <div class="mdl-grid main-content">
-      <!-- Argomenti lezione -->
-      <div class="mdl-cell mdl-cell--4-col">
-        <div class="mdl-card mdl-shadow--2dp home-cards">
-          <div class="mdl-card__title" style="color: #fff; background: #3E4EB8;">
-            <h2 class="mdl-card__title-text">Argomenti lezione</h2>
+          <button id="select-date" class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">date_range</i>
+          </button>
+          <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="select-date">
+            <li class="mdl-menu__item" onclick="fillOggi($.format.date(new Date(), 'yyyy-MM-dd'));">Oggi</li>
+            <li class="mdl-menu__item" onclick="fillOggi($.format.date((function(d){ d.setDate(d.getDate()-1); return d})(new Date), 'yyyy-MM-dd'));">Ieri</li>
+            <li class="mdl-menu__item" onclick="">Scegli data</li>
+          </ul>
+          <button id="update" class="mdl-button mdl-js-button mdl-button--icon button-nav">
+            <i class="material-icons">update</i>
+          </button>
+          <div class="mdl-tooltip" data-mdl-for="update">
+            Aggiorna
           </div>
-          <div class="mdl-card__supporting-text">
-            <div id="argomenti-lezione">
 
-            </div>
-
-          </div>
-          <div id="argomenti-loading" class="mdl-spinner mdl-js-spinner is-active" style="align-self: center; vertical-align: middle; margin-top: 16px;"></div>
-        </div>
-      </div>
-      <!--/ Argomenti lezione -->
-
-      <!-- Compiti assegnati  -->
-      <div class="mdl-cell mdl-cell--4-col">
-        <div class="mdl-card mdl-shadow--2dp home-cards">
-          <div class="mdl-card__title" style="color: #fff; background: #4caf50;">
-            <h2 class="mdl-card__title-text">Compiti assegnati</h2>
-          </div>
-          <div class="mdl-card__supporting-text">
-            <div id="compiti-assegnati">
-
-            </div>
-
-          </div>
-          <div id="compiti-loading" class="mdl-spinner mdl-js-spinner is-active" style="align-self: center; vertical-align: middle; margin-top: 16px;"></div>
-        </div>
-      </div>
-      <!--/ Compiti assegnati -->
-
-      <!-- Voti giornalieri  -->
-      <div class="mdl-cell mdl-cell--4-col">
-        <div class="mdl-card mdl-shadow--2dp home-cards">
-          <div class="mdl-card__title" style="color: #fff; background: #FF3D00;">
-            <h2 class="mdl-card__title-text">Voti giornalieri</h2>
-          </div>
-          <div class="mdl-card__supporting-text">
-            <div id="voti-giornalieri">
-
-            </div>
-
-          </div>
-          <div id="voti-loading" class="mdl-spinner mdl-js-spinner is-active" style="align-self: center; vertical-align: middle; margin-top: 16px;"></div>
-        </div>
-      </div>
-      <!--/ Voti giornalieri -->
-
+          <button id="menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon">
+            <i class="material-icons">more_vert</i>
+          </button>
+          <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+          for="menu-lower-right">
+          <li class="mdl-menu__item" onclick="settingsDialogElement.showModal();">Opzioni</li>
+          <li id="logout" class="mdl-menu__item mdl-menu__item--full-bleed-divider" onclick="logoutDialogElement.showModal();">Logout</li>
+          <li class="mdl-menu__item">Info</li>
+          <li class="mdl-menu__item" onclick="window.open('https://franci22.ml/contact.html')">Contattami</li>
+        </ul>
+      </nav>
     </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">ScuolaNext Light</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="/main.html"><i class="material-icons nav-icons" role="presentation">home</i>Home</a>
+      <a class="mdl-navigation__link" href="/main.html"><i class="material-icons nav-icons" role="presentation">school</i>Classe</a>
+    </nav>
   </div>
-  <a href="https://github.com/franci22/ScuolaNextLight" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-button--accent" hidden="hidden">Vedi Sorgente</a>
-</main>
+  <main class="mdl-layout__content mdl-color--grey-100">
+    <div class="page-content">
+      <div class="mdl-grid main-content">
+        <!-- Argomenti lezione -->
+        <div class="mdl-cell mdl-cell--4-col">
+          <div class="mdl-card mdl-shadow--2dp home-cards">
+            <div class="mdl-card__title" style="color: #fff; background: #3E4EB8;">
+              <h2 class="mdl-card__title-text">Argomenti lezione</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              <div id="argomenti-lezione">
+
+              </div>
+
+            </div>
+            <div id="argomenti-loading" class="mdl-spinner mdl-js-spinner is-active" style="align-self: center; vertical-align: middle; margin-top: 16px;"></div>
+          </div>
+        </div>
+        <!--/ Argomenti lezione -->
+
+        <!-- Compiti assegnati  -->
+        <div class="mdl-cell mdl-cell--4-col">
+          <div class="mdl-card mdl-shadow--2dp home-cards">
+            <div class="mdl-card__title" style="color: #fff; background: #4caf50;">
+              <h2 class="mdl-card__title-text">Compiti assegnati</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              <div id="compiti-assegnati">
+
+              </div>
+
+            </div>
+            <div id="compiti-loading" class="mdl-spinner mdl-js-spinner is-active" style="align-self: center; vertical-align: middle; margin-top: 16px;"></div>
+          </div>
+        </div>
+        <!--/ Compiti assegnati -->
+
+        <!-- Voti giornalieri  -->
+        <div class="mdl-cell mdl-cell--4-col">
+          <div class="mdl-card mdl-shadow--2dp home-cards">
+            <div class="mdl-card__title" style="color: #fff; background: #FF3D00;">
+              <h2 class="mdl-card__title-text">Voti giornalieri</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              <div id="voti-giornalieri">
+
+              </div>
+
+            </div>
+            <div id="voti-loading" class="mdl-spinner mdl-js-spinner is-active" style="align-self: center; vertical-align: middle; margin-top: 16px;"></div>
+          </div>
+        </div>
+        <!--/ Voti giornalieri -->
+
+      </div>
+    </div>
+    <a href="https://github.com/franci22/ScuolaNextLight" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-button--accent" hidden="hidden">Vedi Sorgente</a>
+  </main>
 </div>
 <script src="https://unpkg.com/dialog-polyfill@latest/dialog-polyfill.js"></script>
 <script src="js/functions.js"></script>
