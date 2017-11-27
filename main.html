@@ -78,20 +78,26 @@
         <div class="mdl-layout-spacer"></div>
         <nav class="mdl-navigation">
 
-          <button id="select-date" class="mdl-button mdl-js-button mdl-button--icon">
+          <!-- Home navigation -->
+          <a class="mdl-navigation__link home-navigation" id="oggi-date-text" style="padding: 0 14px;">Aggiornamento...</a>
+          <button id="select-date" class="mdl-button mdl-js-button mdl-button--icon home-navigation">
             <i class="material-icons">date_range</i>
           </button>
+          <div class="mdl-tooltip" data-mdl-for="select-date">
+            Data
+          </div>
           <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="select-date">
-            <li class="mdl-menu__item" onclick="fillOggi($.format.date(new Date(), 'yyyy-MM-dd'));">Oggi</li>
-            <li class="mdl-menu__item" onclick="fillOggi($.format.date((function(d){ d.setDate(d.getDate()-1); return d})(new Date), 'yyyy-MM-dd'));">Ieri</li>
+            <li class="mdl-menu__item" onclick="current_date = $.format.date(new Date(), 'yyyy-MM-dd'); fillOggi(current_date);">Oggi</li>
+            <li class="mdl-menu__item" onclick="current_date = $.format.date((function(d){ d.setDate(d.getDate()-1); return d})(new Date), 'yyyy-MM-dd'); fillOggi(current_date);">Ieri</li>
             <li class="mdl-menu__item" onclick="oggiDatepickerDialogElement.showModal();">Scegli data</li>
           </ul>
-          <button id="update" class="mdl-button mdl-js-button mdl-button--icon button-nav">
+          <button id="update" class="mdl-button mdl-js-button mdl-button--icon button-nav home-navigation" onclick="fillOggi(current_date);">
             <i class="material-icons">update</i>
           </button>
           <div class="mdl-tooltip" data-mdl-for="update">
             Aggiorna
           </div>
+          <!--/ Home navigation -->
 
           <button id="menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon">
             <i class="material-icons">more_vert</i>

@@ -1,5 +1,6 @@
 var session = Cookies.getJSON("session");
 var codicescuola = Cookies.get("codicescuola");
+var current_date;
 var alunno;
 
 $(function(){
@@ -28,7 +29,8 @@ $(function(){
   oggiPicker.addEventListener('change', function(e) {
     oggiDatepickerDialogElement.close();
     var selectedDate = oggiPicker.MaterialDatePicker.getSelectedDate();
-    fillOggi($.format.date(selectedDate, "yyyy-MM-dd"));
+    current_date = $.format.date(selectedDate, "yyyy-MM-dd");
+    fillOggi(current_date);
   });
   oggiPicker.addEventListener('cancel', function() {
     oggiDatepickerDialogElement.close();
@@ -38,7 +40,8 @@ $(function(){
 function updateMain(){
   var fill = function () {
     alunno = Cookies.getJSON("alunno");
-    fillOggi($.format.date(new Date(), "yyyy-MM-dd"));
+    current_date = $.format.date(new Date(), "yyyy-MM-dd");
+    fillOggi(current_date);
   }
   if (!Cookies.get("alunno")) {
     updateAlunno(session.token, codicescuola).then(fill);
@@ -51,6 +54,7 @@ function fillOggi(day) {
   var argomenti_ul = $("#argomenti-lezione");
   var compiti_ul = $("#compiti-assegnati");
   var voti_ul = $("#voti-giornalieri");
+  $("#oggi-date-text").text("Aggiornamento...");
   argomenti_ul.empty();
   $("#argomenti-loading").show();
   compiti_ul.empty();
@@ -93,6 +97,8 @@ function fillOggi(day) {
     $("#argomenti-loading").hide();
     $("#compiti-loading").hide();
     $("#voti-loading").hide();
+
+    $("#oggi-date-text").text($.format.date(Date.parse(day), "dd/MM/yyyy"));
   }, { 'datGiorno': day });
 }
 
@@ -127,11 +133,14 @@ function switchDiv(div) {
     case 'home':
       $("#home-div").show();
       $("#classe-div").hide();
-      fillOggi($.format.date(new Date(), "yyyy-MM-dd"));
+      $(".home-navigation").show();
+      current_date = $.format.date(new Date(), "yyyy-MM-dd");
+      fillOggi(current_date);
       break;
     case 'classe':
       $("#home-div").hide();
       $("#classe-div").show();
+      $(".home-navigation").hide();
       fillProfessori();
       break;
     default:
