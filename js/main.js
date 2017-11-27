@@ -137,6 +137,7 @@ function switchDiv(div) {
     default:
       console.log("Errore.");
   }
+  if($(".mdl-layout__drawer").hasClass("is-visible")) $('.mdl-layout')[0].MaterialLayout.toggleDrawer();
 }
 
 $('#switch-view-source-hidden').click(function() {
