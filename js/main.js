@@ -39,8 +39,6 @@ function updateMain(){
   var fill = function () {
     alunno = Cookies.getJSON("alunno");
     fillOggi($.format.date(new Date(), "yyyy-MM-dd"));
-    //fillProfessori();
-    fillVoti();
   }
   if (!Cookies.get("alunno")) {
     updateAlunno(session.token, codicescuola).then(fill);
@@ -98,16 +96,12 @@ function fillOggi(day) {
   }, { 'datGiorno': day });
 }
 
-function fillVoti() {
-
-}
-
 function fillProfessori() {
-  $("#professori ul").empty();
+  var professori_ul = $("#professori");
+  professori_ul.empty();
   $("#professori-loading").show();
   request("docenticlasse", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola }, function () {
     var professori = JSON.parse(this.responseText);
-    var professori_ul = $("#professori ul");
     var icon_html = '<i class="material-icons mdl-list__item-icon">person</i>';
     professori.forEach(function (element) {
       var row = '<li class="mdl-list__item mdl-list__item--two-line"><span class="mdl-list__item-primary-content">' + icon_html +' ' + element.docente.nome + ' ' + element.docente.cognome + '<span class="mdl-list__item-sub-title">' + element.materie + '</span></span></li>';
@@ -125,6 +119,23 @@ function logout() {
 function settingsInit() {
   if (Cookies.get('view-source-hidden')) {
     $("#switch-view-source-hidden").attr("checked", true);
+  }
+}
+
+function switchDiv(div) {
+  switch (div) {
+    case 'home':
+      $("#home-div").show();
+      $("#classe-div").hide();
+      fillOggi($.format.date(new Date(), "yyyy-MM-dd"));
+      break;
+    case 'classe':
+      $("#home-div").hide();
+      $("#classe-div").show();
+      fillProfessori();
+      break;
+    default:
+      console.log("Errore.");
   }
 }
 

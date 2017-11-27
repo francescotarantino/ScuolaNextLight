@@ -109,12 +109,12 @@
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">ScuolaNext Light</span>
     <nav class="mdl-navigation">
-      <a class="mdl-navigation__link" href="/main.html"><i class="material-icons nav-icons" role="presentation">home</i>Home</a>
-      <a class="mdl-navigation__link" href="/main.html"><i class="material-icons nav-icons" role="presentation">school</i>Classe</a>
+      <a class="mdl-navigation__link" onclick="switchDiv('home')" href="#"><i class="material-icons nav-icons" role="presentation">home</i>Home</a>
+      <a class="mdl-navigation__link" onclick="switchDiv('classe')" href="#"><i class="material-icons nav-icons" role="presentation">school</i>Classe</a>
     </nav>
   </div>
   <main class="mdl-layout__content mdl-color--grey-100">
-    <div class="page-content">
+    <div class="page-content" id="home-div">
       <div class="mdl-grid main-content">
         <!-- Argomenti lezione -->
         <div class="mdl-cell mdl-cell--4-col">
@@ -167,6 +167,24 @@
         </div>
         <!--/ Voti giornalieri -->
 
+      </div>
+    </div>
+    <div class="page-content" id="classe-div" style="display: none;">
+      <div class="mdl-grid main-content">
+        <!-- Professori -->
+        <div class="mdl-cell mdl-cell--4-col">
+          <div class="mdl-card mdl-shadow--2dp home-cards">
+            <div class="mdl-card__title" style="color: #fff; background: #3E4EB8;">
+              <h2 class="mdl-card__title-text">Professori</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              <ul class="mdl-list" style="margin: 0px; padding: 0px;" id="professori">
+              </ul>
+            </div>
+            <div id="professori-loading" class="mdl-spinner mdl-js-spinner is-active" style="align-self: center; vertical-align: middle;"></div>
+          </div>
+        </div>
+        <!--/ Professori -->
       </div>
     </div>
     <a href="https://github.com/franci22/ScuolaNextLight" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored mdl-button--accent" hidden="hidden">Vedi Sorgente</a>
