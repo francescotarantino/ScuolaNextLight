@@ -76,10 +76,18 @@ function fillOggi(day) {
         compiti_ul.append(row);
       } else if (element.tipo == "VOT") {
         i_voti++;
-        if (element.dati.desCommento == "") {
+        var tipo;
+        if (element.dati.desCommento == "" && element.dati.desProva == "") {
           element.dati.desCommento = "Nessun commento.";
         }
-        var row = '<div class="oggi-text"><span class="materia">' + element.dati.desMateria + ' <span class="mdl-chip chip-voto mdl-color--red mdl-color-text--white"><span class="mdl-chip__text">' + element.dati.codVoto + '</span></span></span><span class="info">' + element.dati.desCommento + '<br />' + element.dati.docente + '</span></div>';
+        if (element.dati.codVotoPratico == "N") {
+          tipo = " (orale)";
+        } else if (element.dati.codVotoPratico == "S") {
+          tipo = " (scritto)";
+        } else {
+          voto = "";
+        }
+        var row = '<div class="oggi-text"><span class="materia">' + element.dati.desMateria + tipo + ' <span class="mdl-chip chip-voto mdl-color--red mdl-color-text--white"><span class="mdl-chip__text">' + element.dati.codVoto + '</span></span></span><span class="info">' + element.dati.desProva + ' ' + element.dati.desCommento + '<br />' + element.dati.docente + '</span></div>';
         voti_ul.append(row);
       }
     });
