@@ -87,7 +87,14 @@ function fillOggi(day) {
         } else {
           voto = "";
         }
-        var row = '<div class="oggi-text"><span class="materia">' + element.dati.desMateria + tipo + ' <span class="mdl-chip chip-voto mdl-color--red mdl-color-text--white"><span class="mdl-chip__text">' + element.dati.codVoto + '</span></span></span><span class="info">' + element.dati.desProva + ' ' + element.dati.desCommento + '<br />' + element.dati.docente + '</span></div>';
+        if (element.dati.decValore >= 8.5) {
+          var colore = "green";
+        } else if (element.dati.decValore < 8.5 && element.dati.decValore >= 6) {
+          var colore = "orange";
+        } else {
+          var colore = "red";
+        }
+        var row = '<div class="oggi-text"><span class="materia">' + element.dati.desMateria + tipo + ' <span class="mdl-chip chip-voto mdl-color--' + colore + ' mdl-color-text--white"><span class="mdl-chip__text">' + element.dati.codVoto + '</span></span></span><span class="info">' + element.dati.desProva + ' ' + element.dati.desCommento + '<br />' + element.dati.docente + '</span></div>';
         voti_ul.append(row);
       }
     });
