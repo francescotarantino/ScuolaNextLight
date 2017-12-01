@@ -5,7 +5,6 @@ var alunno;
 
 $(function(){
   updateMain();
-  settingsInit();
 
   MaterialDatePicker.locales.weekStart = 1;
   MaterialDatePicker.locales.weekDays = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
@@ -139,7 +138,7 @@ function logout() {
 
 function settingsInit() {
   if (Cookies.get('view-source-hidden')) {
-    $("#switch-view-source-hidden").attr("checked", true);
+    $("#switch-view-source-hidden-label")[0].MaterialSwitch.on();
   }
 }
 
