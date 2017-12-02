@@ -50,10 +50,12 @@ function updateMain(){
 }
 
 function fillOggi(day) {
+  var nav_loading = $("#nav-loading")[0];
+  nav_loading.MaterialSpinner.start();
   var argomenti_ul = $("#argomenti-lezione");
   var compiti_ul = $("#compiti-assegnati");
   var voti_ul = $("#voti-giornalieri");
-  $("#oggi-date-text").text("Aggiornamento...");
+  $("#oggi-date-text").text("");
   argomenti_ul.empty();
   $("#argomenti-loading").show();
   compiti_ul.empty();
@@ -96,6 +98,7 @@ function fillOggi(day) {
         var row = '<div class="oggi-text"><span class="materia">' + element.dati.desMateria + tipo + ' <span class="mdl-chip chip-voto mdl-color--' + colore + ' mdl-color-text--white"><span class="mdl-chip__text">' + element.dati.codVoto + '</span></span></span><span class="info">' + element.dati.desProva + ' ' + element.dati.desCommento + '<br />' + element.dati.docente + '</span></div>';
         voti_ul.append(row);
       }
+      nav_loading.MaterialSpinner.stop();
     });
 
     if (i_voti == 0) {

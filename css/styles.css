@@ -71,3 +71,7 @@ html, body {
   background: none;
   box-shadow: none;
 }
+
+.mdl-spinner__layer, .white-spinner {
+  border-color: white;
+}
