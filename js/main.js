@@ -119,6 +119,97 @@ function fillOggi(day) {
   }, { 'datGiorno': day });
 }
 
+function fillMaterie() {
+  var nav_loading = $("#nav-loading")[0];
+  nav_loading.MaterialSpinner.start();
+  $(".voti-materia").empty();
+  $(".argomenti-materia").empty();
+  $(".compiti-materia").empty();
+
+  //Voti
+  request("votigiornalieri", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola }, function () {
+    var voti = JSON.parse(this.responseText);
+    console.log(voti);
+    voti.dati.forEach(function (element) {
+      createMaterieDiv(element.prgMateria, element.desMateria);
+
+      if (element.desCommento == "" && element.desProva == "") {
+        element.desCommento = "Nessun commento.";
+      }
+      if (element.codVotoPratico == "N") {
+        var tipo = " (orale)";
+      } else if (element.codVotoPratico == "S") {
+        var tipo = " (scritto)";
+      } else {
+        var voto = "";
+      }
+      if (element.decValore >= 8.5) {
+        var colore = "green";
+      } else if (element.decValore < 8.5 && element.decValore >= 6) {
+        var colore = "orange";
+      } else {
+        var colore = "red";
+      }
+      var row = '<div class="oggi-text"><span class="materia">' + $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy") + tipo + ' <span class="mdl-chip chip-voto mdl-color--' + colore + ' mdl-color-text--white"><span class="mdl-chip__text">' + element.codVoto + '</span></span></span><span class="info">' + element.desProva + ' ' + element.desCommento + '<br />' + element.docente + '</span></div>';
+      $("#voti-materia-"+element.prgMateria).append(row);
+    });
+    nav_loading.MaterialSpinner.stop();
+  });
+
+  //TODO
+}
+
+function createMaterieDiv(id, nome){
+  if (!$("#cell-materia-"+id).length) {
+    $('<div/>', {
+      "class": "mdl-cell mdl-cell--4-col",
+      "id": "cell-materia-" + id,
+      html: $('<div/>', {
+        "class": "mdl-card mdl-shadow--2dp home-cards",
+        html: [$('<div/>', {
+          "class": "mdl-card__title",
+          css: {
+            "color": "#fff",
+            "background": "#3E4EB8"
+          },
+          html: $('<h2/>', {
+            "class": "mdl-card__title-text",
+            text: nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase()
+          })
+        }), $('<div/>', {
+          "class": "mdl-tabs mdl-js-tabs mdl-js-ripple-effect",
+          html: [$('<div/>', {
+            "class": "mdl-tabs__tab-bar",
+            html: [$('<a/>', {
+              "class": "mdl-tabs__tab is-active",
+              "href": "#voti-materia-" + id,
+              text: "Voti"
+            }), $('<a/>', {
+              "class": "mdl-tabs__tab",
+              "href": "#argomenti-materia-" + id,
+              text: "Argomenti"
+            }), $('<a/>', {
+              "class": "mdl-tabs__tab",
+              "href": "#compiti-materia-" + id,
+              text: "Compiti"
+            })]
+          }), $('<div/>', {
+            "class": "mdl-tabs__panel is-active voti-materia",
+            "id": "voti-materia-" + id
+          }), $('<div/>', {
+            "class": "mdl-tabs__panel argomenti-materia",
+            "id": "argomenti-materia-" + id
+          }), $('<div/>', {
+            "class": "mdl-tabs__panel compiti-materia",
+            "id": "compiti-materia-" + id
+          })]
+        })]
+      })
+    }).appendTo($("#materie-container"));
+  }
+  componentHandler.upgradeDom();
+}
+
 function fillProfessori() {
   var professori_ul = $("#professori");
   professori_ul.empty();
@@ -150,13 +241,22 @@ function switchDiv(div) {
     case 'home':
       $("#home-div").show();
       $("#classe-div").hide();
+      $("#materie-div").hide();
       $(".home-navigation").show();
       current_date = $.format.date(new Date(), "yyyy-MM-dd");
       fillOggi(current_date);
       break;
+    case 'materie':
+      $("#home-div").hide();
+      $("#classe-div").hide();
+      $("#materie-div").show();
+      $(".home-navigation").hide();
+      fillMaterie();
+      break;
     case 'classe':
       $("#home-div").hide();
       $("#classe-div").show();
+      $("#materie-div").hide();
       $(".home-navigation").hide();
       fillProfessori();
       break;
