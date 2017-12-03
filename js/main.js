@@ -188,12 +188,13 @@ function fillMaterie() {
     });
     return dfd.promise();
   }
-  f_voti().then(f_argomenti().then(f_compiti().then(function () {
+
+  f_voti().then(f_argomenti).then(f_compiti).then(function () {
     nav_loading.MaterialSpinner.stop();
     $(".voti-materia:empty").append("<h6>Nessun voto.</h6>");
     $(".argomenti-materia:empty").append("<h6>Nessun argomento.</h6>");
     $(".compiti-materia:empty").append("<h6>Nessun compito.</h6>");
-  })));
+  });
 }
 
 function createMaterieDiv(id, nome){
@@ -243,8 +244,8 @@ function createMaterieDiv(id, nome){
         })]
       })
     }).appendTo($("#materie-container"));
+    componentHandler.upgradeDom();
   }
-  componentHandler.upgradeDom();
 }
 
 function fillProfessori() {

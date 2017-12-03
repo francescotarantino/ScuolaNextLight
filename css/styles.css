@@ -72,7 +72,7 @@ html, body {
   box-shadow: none;
 }
 
-.mdl-spinner__layer, .white-spinner {
+.white-spinner > .mdl-spinner__layer {
   border-color: white;
 }
 
