@@ -2,6 +2,7 @@ var session = Cookies.getJSON("session");
 var codicescuola = Cookies.get("codicescuola");
 var current_date;
 var alunno;
+var materie_container;
 
 $(function(){
   updateMain();
@@ -190,6 +191,12 @@ function fillMaterie() {
   }
 
   f_voti().then(f_argomenti).then(f_compiti).then(function () {
+    materie_container = $('#materie-container').masonry({
+      itemSelector: '.mdl-cell'
+    });
+    $(".reload-mc-masonry").click(function () {
+      materie_container.masonry();
+    });
     nav_loading.MaterialSpinner.stop();
     $(".voti-materia:empty").append("<h6>Nessun voto.</h6>");
     $(".argomenti-materia:empty").append("<h6>Nessun argomento.</h6>");
@@ -219,15 +226,15 @@ function createMaterieDiv(id, nome){
           html: [$('<div/>', {
             "class": "mdl-tabs__tab-bar",
             html: [$('<a/>', {
-              "class": "mdl-tabs__tab is-active",
+              "class": "mdl-tabs__tab is-active reload-mc-masonry",
               "href": "#voti-materia-" + id,
               text: "Voti"
             }), $('<a/>', {
-              "class": "mdl-tabs__tab",
+              "class": "mdl-tabs__tab reload-mc-masonry",
               "href": "#argomenti-materia-" + id,
               text: "Argomenti"
             }), $('<a/>', {
-              "class": "mdl-tabs__tab",
+              "class": "mdl-tabs__tab reload-mc-masonry",
               "href": "#compiti-materia-" + id,
               text: "Compiti"
             })]
