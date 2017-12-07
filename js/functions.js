@@ -16,7 +16,19 @@ function request(req, headers, callback, query){
   });
   request.onreadystatechange = function () {
     if (request.readyState == 4) {
-      callback.apply(request);
+      if (request.status == 0) {
+        var notification = $('.mdl-js-snackbar')[0];
+        notification.MaterialSnackbar.showSnackbar({
+            message: 'Errore di rete',
+            timeout: 4000,
+            actionHandler: function (event) {
+              notification.MaterialSnackbar.hideSnackbar();
+            },
+            actionText: 'Ok'
+          });
+      } else {
+        callback.apply(request);
+      }
     }
   }
   request.send(null);
