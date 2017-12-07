@@ -7,6 +7,7 @@ var materie_container;
 $(function(){
   updateMain();
 
+  $("#oggi-datepicker").addClass("mdl-datepicker mdl-js-datepicker mdl-datepicker--inline is-visible");
   MaterialDatePicker.locales.weekStart = 1;
   MaterialDatePicker.locales.weekDays = ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
   MaterialDatePicker.locales.weekDaysShort = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
@@ -23,6 +24,7 @@ $(function(){
     'Nov', 'Dic'
   ];
   MaterialDatePicker.locales.actions.cancel = "Annulla";
+  componentHandler.upgradeDom();
 
   var oggiPicker = document.querySelector('#oggi-datepicker');
   oggiPicker.MaterialDatePicker.setRange(null, new Date());
