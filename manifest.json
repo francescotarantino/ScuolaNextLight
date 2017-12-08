@@ -1,0 +1,22 @@
+{
+  "name": "ScuolaNextLight",
+  "short_name": "ScuolaNextLight",
+  "theme_color": "#F44336",
+  "background_color": "#F44336",
+  "orientation": "any",
+  "display": "standalone",
+  "start_url": "/main.html",
+  "icons": [
+    {
+      "src": "images/icon_round.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "author": {
+    "name": "Francesco Tarantino",
+    "website": "https://franci22.ml",
+    "github": "https://github.com/franci22",
+    "source-repo": "https://github.com/franci22/ScuolaNextLight"
+  }
+}
