@@ -1,12 +1,12 @@
 var x_version = "2.0.2";
 var x_key_app = "ax6542sdru3217t4eesd9";
 
-function request(req, headers, callback, query){
+function request(req, headers, query, callback, network_error, undefined_error){
   var request = new XMLHttpRequest();
-  if (query) {
-    var other = "?" + $.param(query);
-  } else {
+  if ($.isEmptyObject(query)) {
     var other = "";
+  } else {
+    var other = "?" + $.param(query);
   }
   request.open('GET', 'https://www.portaleargo.it/famiglia/api/rest/'+req+other, true);
   request.setRequestHeader("x-key-app", x_key_app);
@@ -16,18 +16,15 @@ function request(req, headers, callback, query){
   });
   request.onreadystatechange = function () {
     if (request.readyState == 4) {
-      if (request.status == 0) {
-        var notification = $('.mdl-js-snackbar')[0];
-        notification.MaterialSnackbar.showSnackbar({
-            message: 'Errore di rete',
-            timeout: 4000,
-            actionHandler: function (event) {
-              notification.MaterialSnackbar.hideSnackbar();
-            },
-            actionText: 'Ok'
-          });
-      } else {
-        callback.apply(request);
+      switch (request.status) {
+        case 200:
+          callback.apply(request);
+          break;
+        case 0:
+          if(network_error) network_error();
+          break;
+        default:
+          if(undefined_error) undefined_error();
       }
     }
   }
@@ -36,7 +33,7 @@ function request(req, headers, callback, query){
 
 function updateAlunno (token, codicescuola){
   var dfd = $.Deferred();
-  request("schede", { 'x-cod-min': codicescuola, 'x-auth-token': token }, function () {
+  request("schede", { 'x-cod-min': codicescuola, 'x-auth-token': token }, {}, function () {
     Cookies.set("alunno", this.responseText);
     dfd.resolve();
   });

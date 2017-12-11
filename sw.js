@@ -1,4 +1,4 @@
-var cacheName = "cache-v0.1beta";
+var cacheName = "cache-v0.2beta"; //TODO: Automatic refresh
 
 var files = [
   'index.html',
@@ -45,7 +45,7 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     caches.match(request).then((response) => {
-      if (response) {
+      if (response && (location.hostname != '127.0.0.1' && location.hostname != 'localhost')) {
         return response;
       }
 
