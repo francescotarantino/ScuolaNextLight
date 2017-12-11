@@ -1,5 +1,3 @@
-var cacheName = "cache-v0.2beta"; //TODO: Automatic refresh
-
 var files = [
   'index.html',
   'main.html',
@@ -26,15 +24,18 @@ self.addEventListener('install', (event) => {
   console.info('Event: Install');
 
   event.waitUntil(
-    caches.open(cacheName)
-    .then((cache) => {
-      return cache.addAll(files)
-      .then(() => {
-        console.info('All files are cached');
-        return self.skipWaiting();
-      })
-      .catch((error) =>  {
-        console.error('Failed to cache', error);
+    fetch("https://api.github.com/repos/franci22/ScuolaNextLight").then(r => r.json())
+    .then(data => {
+      caches.open(data.pushed_at)
+      .then((cache) => {
+        return cache.addAll(files)
+        .then(() => {
+          console.info('All files are cached');
+          return self.skipWaiting();
+        })
+        .catch((error) =>  {
+          console.error('Failed to cache', error);
+        })
       })
     })
   );
@@ -54,7 +55,7 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-self.addEventListener('activate', (event) => {
+/*self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -70,4 +71,4 @@ self.addEventListener('activate', (event) => {
       return self.clients.claim();
     })
   );
-});
+});*/

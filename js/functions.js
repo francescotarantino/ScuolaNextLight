@@ -39,3 +39,52 @@ function updateAlunno (token, codicescuola){
   });
   return dfd.promise();
 }
+
+function updateCache (callback) {
+  var files = [
+    'index.html',
+    'main.html',
+    'login.html',
+    'css/styles.css',
+    'css/material.min.css',
+    'js/main.js',
+    'js/material.min.js',
+    'js/functions.js',
+    'js/login.js',
+    'js/serviceWorkerRegister.js',
+    'images/icon_round.png',
+    'https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js',
+    'https://unpkg.com/dialog-polyfill@latest/dialog-polyfill.js',
+    'https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en',
+    'https://fonts.googleapis.com/icon?family=Material+Icons',
+    'https://unpkg.com/dialog-polyfill@latest/dialog-polyfill.css',
+    'https://code.jquery.com/jquery-3.2.1.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js'
+  ];
+  window.caches.keys().then((c) => {
+    if (c.length != 0){
+      var request = new XMLHttpRequest();
+      request.open('GET', 'https://api.github.com/repos/franci22/ScuolaNextLight', true);
+      request.onreadystatechange = function () {
+        if (request.readyState == 4 && request.status == 200) {
+          window.caches.keys().then((caches) => {
+            var json = JSON.parse(request.responseText);
+            if (caches[0] != json.pushed_at) {
+              window.caches.keys().then((cacheNames) => {
+                cacheNames.map((cache) => {
+                  if (cache !== json.pushed_at) {
+                    window.caches.delete(cache);
+                  }
+                });
+                window.caches.open(json.pushed_at)
+                .then(cache => cache.addAll(files)).then(callback);
+              });
+            }
+          });
+        }
+      }
+      request.send(null);
+    }
+  });
+}

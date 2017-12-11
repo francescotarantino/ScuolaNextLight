@@ -6,6 +6,17 @@ var materie_container;
 
 $(function(){
   updateMain();
+  updateCache(function () {
+    var notification = $('.mdl-js-snackbar')[0];
+    notification.MaterialSnackbar.showSnackbar({
+      message: 'Aggiornamento completato.',
+      timeout: 10000,
+      actionHandler: function (event) {
+        window.location.reload();
+      },
+      actionText: 'Ricarica'
+    });
+  });
 
   $("#oggi-datepicker").addClass("mdl-datepicker mdl-js-datepicker mdl-datepicker--inline is-visible");
   MaterialDatePicker.locales.weekStart = 1;
