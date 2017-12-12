@@ -9,12 +9,18 @@ $(function(){
   updateCache(function () {
     var notification = $('.mdl-js-snackbar')[0];
     notification.MaterialSnackbar.showSnackbar({
-      message: 'Aggiornamento completato.',
+      message: 'Aggiornamento completato',
       timeout: 10000,
       actionHandler: function (event) {
         window.location.reload();
       },
       actionText: 'Ricarica'
+    });
+  }, function () {
+    var notification = $('.mdl-js-snackbar')[0];
+    notification.MaterialSnackbar.showSnackbar({
+      message: 'L\'applicazione è stata salvata sul dispositivo per velocizzarne l\'uso.',
+      timeout: 5000
     });
   });
 

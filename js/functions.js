@@ -40,7 +40,7 @@ function updateAlunno (token, codicescuola){
   return dfd.promise();
 }
 
-function updateCache (callback) {
+function updateCache (callback1, callback2) {
   var files = [
     'index.html',
     'main.html',
@@ -78,13 +78,28 @@ function updateCache (callback) {
                   }
                 });
                 window.caches.open(json.pushed_at)
-                .then(cache => cache.addAll(files)).then(callback);
+                .then(cache => cache.addAll(files)).then(callback1);
               });
             }
           });
         }
       }
       request.send(null);
+    } else {
+      fetch("https://api.github.com/repos/franci22/ScuolaNextLight").then(r => r.json())
+      .then(data => {
+        window.caches.open(data.pushed_at)
+        .then((cache) => {
+          cache.addAll(files)
+          .then(() => {
+            console.info('All files are cached');
+            callback2();
+          })
+          .catch((error) =>  {
+            console.error('Failed to cache', error);
+          })
+        })
+      });
     }
   });
 }
