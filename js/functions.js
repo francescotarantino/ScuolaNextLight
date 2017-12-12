@@ -78,7 +78,10 @@ function updateCache (callback1, callback2) {
                   }
                 });
                 window.caches.open(json.pushed_at)
-                .then(cache => cache.addAll(files)).then(callback1);
+                .then(cache => cache.addAll(files)).then(() => {
+                  localStorage.clear()
+                  callback1();
+                });
               });
             }
           });

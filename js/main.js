@@ -83,9 +83,8 @@ function fillOggi(day) {
   voti_ul.empty();
   $("#voti-loading").show();
 
-  var i_argomenti = 0, i_compiti = 0, i_voti = 0;
-  request("oggi", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola },  { 'datGiorno': day }, function () {
-    var oggi = JSON.parse(this.responseText);
+  var oggi_fill_f = function (data) {
+    var oggi = JSON.parse(data);
     oggi.dati.forEach(function (element) {
       if (element.tipo == "ARG") {
         i_argomenti++;
@@ -136,25 +135,43 @@ function fillOggi(day) {
 
     nav_loading.MaterialSpinner.stop();
     $("#oggi-date-text").text($.format.date(Date.parse(day), "dd/MM/yyyy"));
-  }, function () {
-    var notification = $('.mdl-js-snackbar')[0];
-    notification.MaterialSnackbar.showSnackbar({
-        message: 'Errore di rete',
-        timeout: 10000,
-        actionHandler: function (event) {
-          fillOggi(current_date);
-          notification.MaterialSnackbar.hideSnackbar();
-        },
-        actionText: 'Riprova'
-    });
+  };
 
-    $("#argomenti-loading").hide();
-    $("#compiti-loading").hide();
-    $("#voti-loading").hide();
-    nav_loading.MaterialSpinner.stop();
-    voti_ul.append("<h6>Errore di rete.</h5>");
-    argomenti_ul.append("<h6>Errore di rete.</h5>");
-    compiti_ul.append("<h6>Errore di rete.</h5>");
+  var i_argomenti = 0, i_compiti = 0, i_voti = 0;
+  request("oggi", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola },  { 'datGiorno': day }, function () {
+    oggi_fill_f(this.responseText);
+    if (Storage) {
+      localStorage.setItem("cache_oggi_" + day, this.responseText);
+      localStorage.setItem("cache_oggi_date_" + day, $.format.date(new Date(), "HH:mm dd/MM/yyyy"));
+    }
+  }, function () {
+    if (localStorage.getItem("cache_oggi_date_" + day)) {
+      oggi_fill_f(localStorage.getItem("cache_oggi_" + day));
+      var notification = $('.mdl-js-snackbar')[0];
+      notification.MaterialSnackbar.showSnackbar({
+          message: 'Errore di rete. Ultimo aggiornamento: ' + localStorage.getItem("cache_oggi_date_" + day),
+          timeout: 4000
+      });
+    } else {
+      var notification = $('.mdl-js-snackbar')[0];
+      notification.MaterialSnackbar.showSnackbar({
+          message: 'Errore di rete',
+          timeout: 10000,
+          actionHandler: function (event) {
+            fillOggi(current_date);
+            notification.MaterialSnackbar.hideSnackbar();
+          },
+          actionText: 'Riprova'
+      });
+
+      $("#argomenti-loading").hide();
+      $("#compiti-loading").hide();
+      $("#voti-loading").hide();
+      nav_loading.MaterialSpinner.stop();
+      voti_ul.append("<h6>Errore di rete.</h5>");
+      argomenti_ul.append("<h6>Errore di rete.</h5>");
+      compiti_ul.append("<h6>Errore di rete.</h5>");
+    }
   }, function () {
     var notification = $('.mdl-js-snackbar')[0];
     notification.MaterialSnackbar.showSnackbar({
@@ -185,33 +202,40 @@ function fillMaterie() {
   $(".compiti-materia").empty();
 
   //Voti
+  var voti_fill_f = function (data) {
+    var voti = JSON.parse(data);
+    voti.dati.forEach(function (element) {
+      createMaterieDiv(element.prgMateria, element.desMateria);
+
+      if (element.desCommento == "" && element.desProva == "") {
+        element.desCommento = "Nessun commento.";
+      }
+      if (element.codVotoPratico == "N") {
+        var tipo = " (orale)";
+      } else if (element.codVotoPratico == "S") {
+        var tipo = " (scritto)";
+      } else {
+        var voto = "";
+      }
+      if (element.decValore >= 8.5) {
+        var colore = "green";
+      } else if (element.decValore < 8.5 && element.decValore >= 6) {
+        var colore = "orange";
+      } else {
+        var colore = "red";
+      }
+      var row = '<div class="oggi-text"><span class="materia">' + $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy") + tipo + ' <span class="mdl-chip chip-voto mdl-color--' + colore + ' mdl-color-text--white"><span class="mdl-chip__text">' + element.codVoto + '</span></span></span><span class="info">' + element.desProva + ' ' + element.desCommento + '<br />' + element.docente + '</span></div>';
+      $("#voti-materia-"+element.prgMateria).append(row);
+    });
+  };
   var f_voti = function () {
     var dfd = $.Deferred();
     request("votigiornalieri", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola }, {}, function () {
-      var voti = JSON.parse(this.responseText);
-      voti.dati.forEach(function (element) {
-        createMaterieDiv(element.prgMateria, element.desMateria);
-
-        if (element.desCommento == "" && element.desProva == "") {
-          element.desCommento = "Nessun commento.";
-        }
-        if (element.codVotoPratico == "N") {
-          var tipo = " (orale)";
-        } else if (element.codVotoPratico == "S") {
-          var tipo = " (scritto)";
-        } else {
-          var voto = "";
-        }
-        if (element.decValore >= 8.5) {
-          var colore = "green";
-        } else if (element.decValore < 8.5 && element.decValore >= 6) {
-          var colore = "orange";
-        } else {
-          var colore = "red";
-        }
-        var row = '<div class="oggi-text"><span class="materia">' + $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy") + tipo + ' <span class="mdl-chip chip-voto mdl-color--' + colore + ' mdl-color-text--white"><span class="mdl-chip__text">' + element.codVoto + '</span></span></span><span class="info">' + element.desProva + ' ' + element.desCommento + '<br />' + element.docente + '</span></div>';
-        $("#voti-materia-"+element.prgMateria).append(row);
-      });
+      voti_fill_f(this.responseText);
+      if (Storage) {
+        localStorage.setItem("cache_voti", this.responseText);
+        localStorage.setItem("cache_voti_date", $.format.date(new Date(), "HH:mm dd/MM/yyyy"));
+      }
       dfd.resolve();
     }, function () {
       dfd.reject(1);
@@ -222,34 +246,48 @@ function fillMaterie() {
   }
 
   //Argomenti
+  var argomenti_fill_f = function (data) {
+    var argomenti = JSON.parse(data);
+    argomenti.dati.forEach(function (element) {
+      createMaterieDiv(element.prgMateria, element.desMateria);
+      var row = '<div class="oggi-text"><span class="materia">' + $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy") + '</span><span class="info">' + element.desArgomento + '<br />' + element.docente + '</span></div>';
+      $("#argomenti-materia-"+element.prgMateria).append(row);
+    });
+  };
   var f_argomenti = function () {
     var dfd = $.Deferred();
     request("argomenti", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola }, {}, function () {
-      var argomenti = JSON.parse(this.responseText);
-      argomenti.dati.forEach(function (element) {
-        createMaterieDiv(element.prgMateria, element.desMateria);
-        var row = '<div class="oggi-text"><span class="materia">' + $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy") + '</span><span class="info">' + element.desArgomento + '<br />' + element.docente + '</span></div>';
-        $("#argomenti-materia-"+element.prgMateria).append(row);
-        dfd.resolve();
-      }, function () {
-        dfd.reject(1);
-      }, function () {
-        dfd.reject(2);
-      });
+      argomenti_fill_f(this.responseText);
+      if (Storage) {
+        localStorage.setItem("cache_argomenti", this.responseText);
+        localStorage.setItem("cache_argomenti_date", $.format.date(new Date(), "HH:mm dd/MM/yyyy"));
+      }
+      dfd.resolve();
+    }, function () {
+      dfd.reject(1);
+    }, function () {
+      dfd.reject(2);
     });
     return dfd.promise();
   }
 
   //Compiti
+  var compiti_fill_f = function (data) {
+    var compiti = JSON.parse(data);
+    compiti.dati.forEach(function (element) {
+      createMaterieDiv(element.prgMateria, element.desMateria);
+      var row = '<div class="oggi-text"><span class="materia">' + $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy") + '</span><span class="info">' + element.desCompiti + '<br />' + element.docente + '</span></div>';
+      $("#compiti-materia-"+element.prgMateria).append(row);
+    });
+  };
   var f_compiti = function () {
     var dfd = $.Deferred();
     request("compiti", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola }, {}, function () {
-      var compiti = JSON.parse(this.responseText);
-      compiti.dati.forEach(function (element) {
-        createMaterieDiv(element.prgMateria, element.desMateria);
-        var row = '<div class="oggi-text"><span class="materia">' + $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy") + '</span><span class="info">' + element.desCompiti + '<br />' + element.docente + '</span></div>';
-        $("#compiti-materia-"+element.prgMateria).append(row);
-      });
+      compiti_fill_f(this.responseText);
+      if (Storage) {
+        localStorage.setItem("cache_compiti", this.responseText);
+        localStorage.setItem("cache_compiti_date", $.format.date(new Date(), "HH:mm dd/MM/yyyy"));
+      }
       dfd.resolve();
     }, function () {
       dfd.reject(1);
@@ -273,16 +311,46 @@ function fillMaterie() {
   }).fail(function (e) {
     switch (e) {
       case 1:
-        var notification = $('.mdl-js-snackbar')[0];
-        notification.MaterialSnackbar.showSnackbar({
-            message: 'Errore di rete',
-            timeout: 10000,
-            actionHandler: function (event) {
-              fillMaterie();
-              notification.MaterialSnackbar.hideSnackbar();
-            },
-            actionText: 'Riprova'
-        });
+        if (localStorage.getItem("cache_voti_date")) {
+          voti_fill_f(localStorage.getItem("cache_voti"));
+          var date_cache = localStorage.getItem("cache_voti_date");
+        }
+        if (localStorage.getItem("cache_argomenti_date")) {
+          argomenti_fill_f(localStorage.getItem("cache_argomenti"));
+          var date_cache = localStorage.getItem("cache_argomenti_date");
+        }
+        if (localStorage.getItem("cache_compiti_date")) {
+          compiti_fill_f(localStorage.getItem("cache_compiti"));
+          var date_cache = localStorage.getItem("cache_compiti_date");
+        }
+        if (date_cache) {
+          var notification = $('.mdl-js-snackbar')[0];
+          notification.MaterialSnackbar.showSnackbar({
+              message: 'Errore di rete. Ultimo aggiornamento: ' + date_cache,
+              timeout: 4000
+          });
+          materie_container = $('#materie-container').masonry({
+            itemSelector: '.mdl-cell'
+          });
+          $(".reload-mc-masonry").click(function () {
+            materie_container.masonry();
+          });
+          nav_loading.MaterialSpinner.stop();
+          $(".voti-materia:empty").append("<h6>Nessun voto.</h6>");
+          $(".argomenti-materia:empty").append("<h6>Nessun argomento.</h6>");
+          $(".compiti-materia:empty").append("<h6>Nessun compito.</h6>");
+        } else {
+          var notification = $('.mdl-js-snackbar')[0];
+          notification.MaterialSnackbar.showSnackbar({
+              message: 'Errore di rete',
+              timeout: 10000,
+              actionHandler: function (event) {
+                fillMaterie();
+                notification.MaterialSnackbar.hideSnackbar();
+              },
+              actionText: 'Riprova'
+          });
+        }
         break;
       case 2:
         var notification = $('.mdl-js-snackbar')[0];
@@ -356,18 +424,36 @@ function createMaterieDiv(id, nome){
 function fillProfessori() {
   var professori_ul = $("#professori");
   professori_ul.empty();
-  $("#professori-loading").show();
-  request("docenticlasse", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola }, {}, function () {
-    var professori = JSON.parse(this.responseText);
+  var professori_fill_f = function (data) {
+    var professori = JSON.parse(data);
     var icon_html = '<i class="material-icons mdl-list__item-icon">person</i>';
     professori.forEach(function (element) {
       var row = '<li class="mdl-list__item mdl-list__item--two-line"><span class="mdl-list__item-primary-content">' + icon_html +' ' + element.docente.nome + ' ' + element.docente.cognome + '<span class="mdl-list__item-sub-title">' + element.materie + '</span></span></li>';
       professori_ul.append(row);
     });
     $("#professori-loading").hide();
+  };
+  $("#professori-loading").show();
+  request("docenticlasse", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola }, {}, function () {
+    professori_fill_f(this.responseText);
+    if (Storage) {
+      localStorage.setItem("cache_professori", this.responseText);
+      localStorage.setItem("cache_professori_date", $.format.date(new Date(), "HH:mm dd/MM/yyyy"));
+    }
   }, function () {
-    professori_ul.append("<h6>Errore di rete.</h6>");
+    if (localStorage.getItem("cache_professori")) {
+      professori_fill_f(localStorage.getItem("cache_professori"));
+      var notification = $('.mdl-js-snackbar')[0];
+      notification.MaterialSnackbar.showSnackbar({
+          message: 'Errore di rete. Ultimo aggiornamento: ' + localStorage.getItem("cache_professori_date"),
+          timeout: 4000
+      });
+    } else {
+      $("#professori-loading").hide();
+      professori_ul.append("<h6>Errore di rete.</h6>");
+    }
   }, function () {
+    $("#professori-loading").hide();
     professori_ul.append("<h6>Errore.</h6>");
   });
 }
