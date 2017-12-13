@@ -88,34 +88,50 @@ function fillOggi(day) {
     oggi.dati.forEach(function (element) {
       if (element.tipo == "ARG") {
         i_argomenti++;
-        var row = '<div class="oggi-text"><span class="materia">' + element.dati.desMateria + '</span><span class="info">' + element.dati.desArgomento + '<br />' + element.dati.docente + '</span></div>';
-        argomenti_ul.append(row);
+        $('<div/>', {
+          "class": "oggi-text",
+          html: [$('<span/>', {
+            "class": "materia",
+            text: element.dati.desMateria
+          }), $('<span/>', {
+            "class": "info",
+            html: element.dati.desArgomento + '<br />' + element.dati.docente
+          })]
+        }).appendTo(argomenti_ul);
       } else if (element.tipo == "COM") {
         i_compiti++;
-        var row = '<div class="oggi-text"><span class="materia">' + element.dati.desMateria + '</span><span class="info">' + element.dati.desCompiti + '<br />' + element.dati.docente + '</span></div>';
-        compiti_ul.append(row);
+        $('<div/>', {
+          "class": "oggi-text",
+          html: [$('<span/>', {
+            "class": "materia",
+            text: element.dati.desMateria
+          }), $('<span/>', {
+            "class": "info",
+            html: element.dati.desCompiti + '<br />' + element.dati.docente
+          })]
+        }).appendTo(compiti_ul);
       } else if (element.tipo == "VOT") {
         i_voti++;
-        var tipo;
         if (element.dati.desCommento == "" && element.dati.desProva == "") {
           element.dati.desCommento = "Nessun commento.";
         }
         if (element.dati.codVotoPratico == "N") {
-          tipo = " (orale)";
+          var tipo = " (orale)";
         } else if (element.dati.codVotoPratico == "S") {
-          tipo = " (scritto)";
+          var tipo = " (scritto)";
         } else {
-          voto = "";
+          var voto = "";
         }
-        if (element.dati.decValore >= 8.5) {
-          var colore = "green";
-        } else if (element.dati.decValore < 8.5 && element.dati.decValore >= 6) {
-          var colore = "orange";
-        } else {
-          var colore = "red";
-        }
-        var row = '<div class="oggi-text"><span class="materia">' + element.dati.desMateria + tipo + ' <span class="mdl-chip chip-voto mdl-color--' + colore + ' mdl-color-text--white"><span class="mdl-chip__text">' + element.dati.codVoto + '</span></span></span><span class="info">' + element.dati.desProva + ' ' + element.dati.desCommento + '<br />' + element.dati.docente + '</span></div>';
-        voti_ul.append(row);
+        $('<div/>', {
+          "class": "oggi-text",
+          html: [$('<span/>', {
+            "class": "materia",
+            html: element.dati.desMateria + tipo + ' <span class="mdl-chip chip-voto mdl-color--' + colore_voto(element.dati.decValore) + ' mdl-color-text--white"><span class="mdl-chip__text">' + element.dati.codVoto + '</span></span>'
+          }), $('<span/>', {
+            "class": "info",
+            html: element.dati.desProva + ' ' + element.dati.desCommento + '<br />' + element.dati.docente
+          })]
+        }).appendTo(voti_ul);
       }
     });
 
@@ -217,15 +233,16 @@ function fillMaterie() {
       } else {
         var voto = "";
       }
-      if (element.decValore >= 8.5) {
-        var colore = "green";
-      } else if (element.decValore < 8.5 && element.decValore >= 6) {
-        var colore = "orange";
-      } else {
-        var colore = "red";
-      }
-      var row = '<div class="oggi-text"><span class="materia">' + $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy") + tipo + ' <span class="mdl-chip chip-voto mdl-color--' + colore + ' mdl-color-text--white"><span class="mdl-chip__text">' + element.codVoto + '</span></span></span><span class="info">' + element.desProva + ' ' + element.desCommento + '<br />' + element.docente + '</span></div>';
-      $("#voti-materia-"+element.prgMateria).append(row);
+      $('<div/>', {
+        "class": "oggi-text",
+        html: [$('<span/>', {
+          "class": "materia",
+          html: $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy") + tipo + ' <span class="mdl-chip chip-voto mdl-color--' + colore_voto(element.decValore) + ' mdl-color-text--white"><span class="mdl-chip__text">' + element.codVoto + '</span></span>'
+        }), $('<span/>', {
+          "class": "info",
+          html: element.desProva + ' ' + element.desCommento + '<br />' + element.docente
+        })]
+      }).appendTo($("#voti-materia-"+element.prgMateria));
     });
   };
   var f_voti = function () {
@@ -250,8 +267,16 @@ function fillMaterie() {
     var argomenti = JSON.parse(data);
     argomenti.dati.forEach(function (element) {
       createMaterieDiv(element.prgMateria, element.desMateria);
-      var row = '<div class="oggi-text"><span class="materia">' + $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy") + '</span><span class="info">' + element.desArgomento + '<br />' + element.docente + '</span></div>';
-      $("#argomenti-materia-"+element.prgMateria).append(row);
+      $('<div/>', {
+        "class": "oggi-text",
+        html: [$('<span/>', {
+          "class": "materia",
+          text: $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy")
+        }), $('<span/>', {
+          "class": "info",
+          html: element.desArgomento + '<br />' + element.docente
+        })]
+      }).appendTo($("#argomenti-materia-"+element.prgMateria));
     });
   };
   var f_argomenti = function () {
@@ -276,8 +301,16 @@ function fillMaterie() {
     var compiti = JSON.parse(data);
     compiti.dati.forEach(function (element) {
       createMaterieDiv(element.prgMateria, element.desMateria);
-      var row = '<div class="oggi-text"><span class="materia">' + $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy") + '</span><span class="info">' + element.desCompiti + '<br />' + element.docente + '</span></div>';
-      $("#compiti-materia-"+element.prgMateria).append(row);
+      $('<div/>', {
+        "class": "oggi-text",
+        html: [$('<span/>', {
+          "class": "materia",
+          text: $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy")
+        }), $('<span/>', {
+          "class": "info",
+          html: element.desCompiti + '<br />' + element.docente
+        })]
+      }).appendTo($("#compiti-materia-"+element.prgMateria));
     });
   };
   var f_compiti = function () {
@@ -428,8 +461,13 @@ function fillProfessori() {
     var professori = JSON.parse(data);
     var icon_html = '<i class="material-icons mdl-list__item-icon">person</i>';
     professori.forEach(function (element) {
-      var row = '<li class="mdl-list__item mdl-list__item--two-line"><span class="mdl-list__item-primary-content">' + icon_html +' ' + element.docente.nome + ' ' + element.docente.cognome + '<span class="mdl-list__item-sub-title">' + element.materie + '</span></span></li>';
-      professori_ul.append(row);
+      $('<li/>', {
+        "class": "mdl-list__item mdl-list__item--two-line",
+        html: $('<span/>', {
+          "class": "mdl-list__item-primary-content",
+          html: icon_html +' ' + toTitleCase(element.docente.nome) + ' ' + toTitleCase(element.docente.cognome) + '<span class="mdl-list__item-sub-title">' + element.materie + '</span>'
+        })
+      }).appendTo(professori_ul);
     });
     $("#professori-loading").hide();
   };
@@ -458,8 +496,27 @@ function fillProfessori() {
   });
 }
 
+function colore_voto (voto) {
+  if (voto >= 9) {
+    return "green";
+  } else if (voto >= 8 && voto < 9) {
+    return "light-green";
+  } else if (voto >= 7 && voto < 8) {
+    return "lime";
+  } else if (voto >= 6 && voto < 7) {
+    return "amber";
+  } else if (voto > 5 && voto < 6) {
+    return "orange";
+  } else if (voto >= 4 && voto <= 5) {
+    return "deep-orange";
+  } else if (voto < 4) {
+    return "red";
+  }
+}
+
 function logout() {
   Cookies.remove('session');
+  localStorage.clear();
   window.location.replace("login.html");
 }
 

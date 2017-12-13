@@ -79,7 +79,7 @@ function updateCache (callback1, callback2) {
                 });
                 window.caches.open(json.pushed_at)
                 .then(cache => cache.addAll(files)).then(() => {
-                  localStorage.clear()
+                  localStorage.clear();
                   callback1();
                 });
               });
@@ -105,4 +105,9 @@ function updateCache (callback1, callback2) {
       });
     }
   });
+}
+
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
