@@ -533,6 +533,7 @@ function switchDiv(div) {
       $("#classe-div").hide();
       $("#materie-div").hide();
       $(".home-navigation").show();
+      $("#update").attr("onclick","fillOggi(current_date);");
       current_date = $.format.date(new Date(), "yyyy-MM-dd");
       fillOggi(current_date);
       break;
@@ -541,6 +542,7 @@ function switchDiv(div) {
       $("#classe-div").hide();
       $("#materie-div").show();
       $(".home-navigation").hide();
+      $("#update").show().attr("onclick","fillMaterie();");
       fillMaterie();
       break;
     case 'classe':
