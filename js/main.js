@@ -92,10 +92,10 @@ function fillOggi(day) {
           "class": "oggi-text",
           html: [$('<span/>', {
             "class": "materia",
-            text: element.dati.desMateria
+            text: element.dati.desMateria.charAt(0).toUpperCase() + element.dati.desMateria.slice(1).toLowerCase()
           }), $('<span/>', {
             "class": "info",
-            html: element.dati.desArgomento + '<br />' + element.dati.docente
+              html: element.dati.desArgomento + '<br />' + toTitleCase(element.dati.docente)
           })]
         }).appendTo(argomenti_ul);
       } else if (element.tipo == "COM") {
@@ -104,10 +104,10 @@ function fillOggi(day) {
           "class": "oggi-text",
           html: [$('<span/>', {
             "class": "materia",
-            text: element.dati.desMateria
+            text: element.dati.desMateria.charAt(0).toUpperCase() + element.dati.desMateria.slice(1).toLowerCase()
           }), $('<span/>', {
             "class": "info",
-            html: element.dati.desCompiti + '<br />' + element.dati.docente
+            html: element.dati.desCompiti + '<br />' + toTitleCase(element.dati.docente)
           })]
         }).appendTo(compiti_ul);
       } else if (element.tipo == "VOT") {
@@ -126,10 +126,10 @@ function fillOggi(day) {
           "class": "oggi-text",
           html: [$('<span/>', {
             "class": "materia",
-            html: element.dati.desMateria + tipo + ' <span class="mdl-chip chip-voto mdl-color--' + colore_voto(element.dati.decValore) + ' mdl-color-text--white"><span class="mdl-chip__text">' + element.dati.codVoto + '</span></span>'
+            html: element.dati.desMateria.charAt(0).toUpperCase() + element.dati.desMateria.slice(1).toLowerCase() + tipo + ' <span class="mdl-chip chip-voto mdl-color--' + colore_voto(element.dati.decValore) + ' mdl-color-text--white"><span class="mdl-chip__text">' + element.dati.codVoto + '</span></span>'
           }), $('<span/>', {
             "class": "info",
-            html: element.dati.desProva + ' ' + element.dati.desCommento + '<br />' + element.dati.docente
+            html: element.dati.desProva + ' ' + element.dati.desCommento + '<br />' + toTitleCase(element.dati.docente)
           })]
         }).appendTo(voti_ul);
       }
@@ -240,7 +240,7 @@ function fillMaterie() {
           html: $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy") + tipo + ' <span class="mdl-chip chip-voto mdl-color--' + colore_voto(element.decValore) + ' mdl-color-text--white"><span class="mdl-chip__text">' + element.codVoto + '</span></span>'
         }), $('<span/>', {
           "class": "info",
-          html: element.desProva + ' ' + element.desCommento + '<br />' + element.docente
+          html: element.desProva + ' ' + element.desCommento + '<br />' + toTitleCase(element.docente)
         })]
       }).appendTo($("#voti-materia-"+element.prgMateria));
     });
@@ -274,7 +274,7 @@ function fillMaterie() {
           text: $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy")
         }), $('<span/>', {
           "class": "info",
-          html: element.desArgomento + '<br />' + element.docente
+          html: element.desArgomento + '<br />' + toTitleCase(element.docente)
         })]
       }).appendTo($("#argomenti-materia-"+element.prgMateria));
     });
@@ -308,7 +308,7 @@ function fillMaterie() {
           text: $.format.date(Date.parse(element.datGiorno), "dd/MM/yyyy")
         }), $('<span/>', {
           "class": "info",
-          html: element.desCompiti + '<br />' + element.docente
+          html: element.desCompiti + '<br />' + toTitleCase(element.docente)
         })]
       }).appendTo($("#compiti-materia-"+element.prgMateria));
     });
@@ -465,7 +465,7 @@ function fillProfessori() {
         "class": "mdl-list__item mdl-list__item--two-line",
         html: $('<span/>', {
           "class": "mdl-list__item-primary-content",
-          html: icon_html +' ' + toTitleCase(element.docente.nome) + ' ' + toTitleCase(element.docente.cognome) + '<span class="mdl-list__item-sub-title">' + element.materie + '</span>'
+          html: icon_html +' ' + toTitleCase(element.docente.nome) + ' ' + toTitleCase(element.docente.cognome) + '<span class="mdl-list__item-sub-title">' + parseMaterieName(element.materie) + '</span>'
         })
       }).appendTo(professori_ul);
     });

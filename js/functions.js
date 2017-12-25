@@ -107,7 +107,18 @@ function updateCache (callback1, callback2) {
   });
 }
 
-function toTitleCase(str)
-{
-    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+function toTitleCase(str){
+  return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+
+function parseMaterieName(str){
+  var materie_parsed = "(";
+  var materie = str.replace("(", "").replace(")", "").split(",");
+  materie.forEach(function (item, index){
+    item = item.charAt(0).toUpperCase() + item.slice(1).toLowerCase();
+    materie_parsed = materie_parsed + item;
+    if(index + 1 != materie.length)
+      materie_parsed = materie_parsed + ", ";
+  });
+  return materie_parsed + ")";
 }
