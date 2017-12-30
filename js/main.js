@@ -119,8 +119,8 @@ function fillOggi(day) {
           var tipo = " (orale)";
         } else if (element.dati.codVotoPratico == "S") {
           var tipo = " (scritto)";
-        } else {
-          var voto = "";
+        } else if (element.dati.codVotoPratico == "P"){
+          var tipo = " (pratico)";
         }
         $('<div/>', {
           "class": "oggi-text",
@@ -230,8 +230,8 @@ function fillMaterie() {
         var tipo = " (orale)";
       } else if (element.codVotoPratico == "S") {
         var tipo = " (scritto)";
-      } else {
-        var voto = "";
+      } else if (element.codVotoPratico == "P") {
+        var tipo = " (pratico)";
       }
       $('<div/>', {
         "class": "oggi-text",
