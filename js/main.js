@@ -454,23 +454,28 @@ function createMaterieDiv(id, nome){
   }
 }
 
-function fillAssenze() {
+function fillAlunno() {
   var nav_loading = $("#nav-loading")[0];
   if(nav_loading.MaterialSpinner) nav_loading.MaterialSpinner.start();
   var assenze_ul = $("#assenze");
   var ritardi_ul = $("#ritardi");
   var permessi_ul = $("#permessi");
+  var note_ul = $("#note");
   assenze_ul.empty();
   $("#assenze-loading").show();
   ritardi_ul.empty();
   $("#ritardi-loading").show();
   permessi_ul.empty();
   $("#permessi-loading").show();
+  note_ul.empty();
+  $("#note-loading").show();
+
+  var i_assenze = 0, i_ritardi = 0, i_permessi = 0, i_note = 0;
 
   var assenze_fill_f = function (data) {
     var assenze = JSON.parse(data);
     assenze.dati.forEach(function (element) {
-      if (element.codEvento == "A") {//TODO
+      if (element.codEvento == "A") {
         i_assenze++;
         $('<div/>', {
           "class": "oggi-text",
@@ -522,64 +527,133 @@ function fillAssenze() {
     $("#assenze-loading").hide();
     $("#ritardi-loading").hide();
     $("#permessi-loading").hide();
-
-    nav_loading.MaterialSpinner.stop();
   };
 
-  var i_assenze = 0, i_ritardi = 0, i_permessi = 0;
-  request("assenze", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola }, {}, function () {
-    assenze_fill_f(this.responseText);
-    if (Storage) {
-      localStorage.setItem("cache_assenze", this.responseText);
-      localStorage.setItem("cache_assenze_date", $.format.date(new Date(), "HH:mm dd/MM/yyyy"));
-    }
-  }, function () {
-    if (localStorage.getItem("cache_assenze_date")) {
-      assenze_fill_f(localStorage.getItem("cache_assenze"));
-      var notification = $('.mdl-js-snackbar')[0];
-      notification.MaterialSnackbar.showSnackbar({
-          message: 'Errore di rete. Ultimo aggiornamento: ' + localStorage.getItem("cache_assenze_date"),
-          timeout: 4000
-      });
-    } else {
-      var notification = $('.mdl-js-snackbar')[0];
-      notification.MaterialSnackbar.showSnackbar({
-          message: 'Errore di rete',
-          timeout: 10000,
-          actionHandler: function (event) {
-            fillAssenze(current_date);
-            notification.MaterialSnackbar.hideSnackbar();
-          },
-          actionText: 'Riprova'
-      });
+  var f_assenze = function () {
+    var dfd = $.Deferred();
+    request("assenze", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola }, {}, function () {
+      assenze_fill_f(this.responseText);
+      if (Storage) {
+        localStorage.setItem("cache_assenze", this.responseText);
+        localStorage.setItem("cache_assenze_date", $.format.date(new Date(), "HH:mm dd/MM/yyyy"));
+      }
+      dfd.resolve();
+    }, function () {
+      dfd.reject(1);
+    }, function () {
+      dfd.reject(2);
+    });
+    return dfd.promise();
+  }
 
-      $("#assenze-loading").hide();
-      $("#ritardi-loading").hide();
-      $("#permessi-loading").hide();
-      nav_loading.MaterialSpinner.stop();
-      voti_ul.append("<h6>Errore di rete.</h5>");
-      argomenti_ul.append("<h6>Errore di rete.</h5>");
-      compiti_ul.append("<h6>Errore di rete.</h5>");
-    }
-  }, function () {
-    var notification = $('.mdl-js-snackbar')[0];
-    notification.MaterialSnackbar.showSnackbar({
-        message: 'Errore. Prova ad effettuare il lougut e a rientrare.',
-        timeout: 10000,
-        actionHandler: function (event) {
-          logoutDialogElement.showModal();
-          notification.MaterialSnackbar.hideSnackbar();
-        },
-        actionText: 'Logout'
+  var note_fill_f = function (data) {
+    var note = JSON.parse(data);
+    note.dati.forEach(function (element) {
+      i_note++;
+      $('<div/>', {
+        "class": "oggi-text",
+        html: [$('<span/>', {
+          "class": "materia",
+          text: $.format.date(Date.parse(element.datNota), "dd/MM/yyyy")
+        }), $('<span/>', {
+          "class": "info",
+            html: element.desNota + '<br />' + toTitleCase(element.docente)
+        })]
+      }).appendTo(note_ul);
     });
 
-    $("#argomenti-loading").hide();
-    $("#compiti-loading").hide();
-    $("#voti-loading").hide();
+    if (i_note == 0) {
+      note_ul.append("<h6>Nessuna nota.</h5>");
+    }
+
+    $("#note-loading").hide();
+  };
+
+  var f_note = function () {
+    var dfd = $.Deferred();
+    request("notedisciplinari", { 'x-cod-min': codicescuola, 'x-auth-token': session.token, 'x-prg-alunno': alunno[0].prgAlunno, 'x-prg-scheda': alunno[0].prgScheda, 'x-prg-scuola': alunno[0].prgScuola }, {}, function () {
+      note_fill_f(this.responseText);
+      if (Storage) {
+        localStorage.setItem("cache_note", this.responseText);
+        localStorage.setItem("cache_note_date", $.format.date(new Date(), "HH:mm dd/MM/yyyy"));
+      }
+      dfd.resolve();
+    }, function () {
+      dfd.reject(1);
+    }, function () {
+      dfd.reject(2);
+    });
+    return dfd.promise();
+  }
+
+  f_assenze().then(f_note).then(function () {
     nav_loading.MaterialSpinner.stop();
-    assenze_ul.append("<h6>Errore di rete.</h5>");
-    ritardi_ul.append("<h6>Errore di rete.</h5>");
-    permessi_ul.append("<h6>Errore di rete.</h5>");
+  }).fail(function (e) {
+    switch (e) {
+      case 1:
+        if (localStorage.getItem("cache_assenze_date")) {
+          assenze_fill_f(localStorage.getItem("cache_assenze"));
+          var date_cache = localStorage.getItem("cache_assenze_date");
+        }
+        if (localStorage.getItem("cache_note_date")) {
+          note_fill_f(localStorage.getItem("cache_note"));
+          var date_cache = localStorage.getItem("cache_note_date");
+        }
+        if (date_cache) {
+          var notification = $('.mdl-js-snackbar')[0];
+          notification.MaterialSnackbar.showSnackbar({
+              message: 'Errore di rete. Ultimo aggiornamento: ' + date_cache,
+              timeout: 4000
+          });
+          nav_loading.MaterialSpinner.stop();
+        } else {
+          var notification = $('.mdl-js-snackbar')[0];
+          notification.MaterialSnackbar.showSnackbar({
+              message: 'Errore di rete',
+              timeout: 10000,
+              actionHandler: function (event) {
+                fillAlunno();
+                notification.MaterialSnackbar.hideSnackbar();
+              },
+              actionText: 'Riprova'
+          });
+
+          $("#assenze-loading").hide();
+          $("#ritardi-loading").hide();
+          $("#permessi-loading").hide();
+          $("#note-loading").hide();
+          nav_loading.MaterialSpinner.stop();
+          voti_ul.append("<h6>Errore di rete.</h5>");
+          argomenti_ul.append("<h6>Errore di rete.</h5>");
+          compiti_ul.append("<h6>Errore di rete.</h5>");
+          note_ul.append("<h6>Errore di rete.</h5>");
+        }
+        break;
+      case 2:
+        var notification = $('.mdl-js-snackbar')[0];
+        notification.MaterialSnackbar.showSnackbar({
+            message: 'Errore. Prova ad effettuare il lougut e a rientrare.',
+            timeout: 10000,
+            actionHandler: function (event) {
+              logoutDialogElement.showModal();
+              notification.MaterialSnackbar.hideSnackbar();
+            },
+            actionText: 'Logout'
+        });
+
+        $("#assenze-loading").hide();
+        $("#ritardi-loading").hide();
+        $("#permessi-loading").hide();
+        $("#note-loading").hide();
+        nav_loading.MaterialSpinner.stop();
+        voti_ul.append("<h6>Errore di rete.</h5>");
+        argomenti_ul.append("<h6>Errore di rete.</h5>");
+        compiti_ul.append("<h6>Errore di rete.</h5>");
+        note_ul.append("<h6>Errore di rete.</h5>");
+        break;
+    }
+    $(".materie-container").empty();
+    nav_loading.MaterialSpinner.stop();
   });
 }
 
@@ -661,7 +735,7 @@ function switchDiv(div) {
       $("#home-div").show();
       $("#classe-div").hide();
       $("#materie-div").hide();
-      $("#assenze-div").hide();
+      $("#alunno-div").hide();
       $(".home-navigation").show();
       $("#update").attr("onclick","fillOggi(current_date);");
       current_date = $.format.date(new Date(), "yyyy-MM-dd");
@@ -670,26 +744,26 @@ function switchDiv(div) {
     case 'materie':
       $("#home-div").hide();
       $("#classe-div").hide();
-      $("#assenze-div").hide();
+      $("#alunno-div").hide();
       $("#materie-div").show();
       $(".home-navigation").hide();
       $("#update").show().attr("onclick","fillMaterie();");
       fillMaterie();
       break;
-    case 'assenze':
+    case 'alunno':
       $("#home-div").hide();
       $("#classe-div").hide();
       $("#materie-div").hide();
-      $("#assenze-div").show();
+      $("#alunno-div").show();
       $(".home-navigation").hide();
-      $("#update").show().attr("onclick","fillAssenze();");
-      fillAssenze();
+      $("#update").show().attr("onclick","fillAlunno();");
+      fillAlunno();
       break;
     case 'classe':
       $("#home-div").hide();
       $("#classe-div").show();
       $("#materie-div").hide();
-      $("#assenze-div").hide();
+      $("#alunno-div").hide();
       $(".home-navigation").hide();
       fillProfessori();
       break;
