@@ -71,7 +71,7 @@ function updateMain(){
 
 function fillOggi(day) {
   var nav_loading = $("#nav-loading")[0];
-  if(nav_loading) nav_loading.MaterialSpinner.start();
+  if(nav_loading.MaterialSpinner) nav_loading.MaterialSpinner.start();
   var argomenti_ul = $("#argomenti-lezione");
   var compiti_ul = $("#compiti-assegnati");
   var voti_ul = $("#voti-giornalieri");
