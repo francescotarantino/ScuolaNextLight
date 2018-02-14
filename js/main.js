@@ -474,6 +474,7 @@ function fillAlunno() {
 
   var assenze_fill_f = function (data) {
     var assenze = JSON.parse(data);
+    var red_dot = '<div style="border-radius: 5px;background: #f00;width: 10px;height: 10px;display: inline-block;margin-left: 5px;"></div>';
     assenze.dati.forEach(function (element) {
       if (element.codEvento == "A") {
         i_assenze++;
@@ -481,7 +482,7 @@ function fillAlunno() {
           "class": "oggi-text",
           html: [$('<span/>', {
             "class": "materia",
-            text: $.format.date(Date.parse(element.datAssenza), "dd/MM/yyyy")
+            html: $.format.date(Date.parse(element.datAssenza), "dd/MM/yyyy") + ((element.datGiustificazione) ? "" : red_dot)
           }), $('<span/>', {
             "class": "info",
               html: 'Registrata da ' + toTitleCase(element.registrataDa).replace("(", "").replace(")", "")
@@ -623,9 +624,9 @@ function fillAlunno() {
           $("#permessi-loading").hide();
           $("#note-loading").hide();
           nav_loading.MaterialSpinner.stop();
-          voti_ul.append("<h6>Errore di rete.</h5>");
-          argomenti_ul.append("<h6>Errore di rete.</h5>");
-          compiti_ul.append("<h6>Errore di rete.</h5>");
+          assenze_ul.append("<h6>Errore di rete.</h5>");
+          ritardi_ul.append("<h6>Errore di rete.</h5>");
+          permessi_ul.append("<h6>Errore di rete.</h5>");
           note_ul.append("<h6>Errore di rete.</h5>");
         }
         break;
@@ -646,9 +647,9 @@ function fillAlunno() {
         $("#permessi-loading").hide();
         $("#note-loading").hide();
         nav_loading.MaterialSpinner.stop();
-        voti_ul.append("<h6>Errore di rete.</h5>");
-        argomenti_ul.append("<h6>Errore di rete.</h5>");
-        compiti_ul.append("<h6>Errore di rete.</h5>");
+        assenze_ul.append("<h6>Errore di rete.</h5>");
+        ritardi_ul.append("<h6>Errore di rete.</h5>");
+        permessi_ul.append("<h6>Errore di rete.</h5>");
         note_ul.append("<h6>Errore di rete.</h5>");
         break;
     }
