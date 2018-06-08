@@ -58,13 +58,25 @@
       <button type="button" class="mdl-button close">No</button>
     </div>
   </dialog>
-  <dialog class="mdl-dialog" id="settingsDialog">
+  <dialog class="mdl-dialog" id="settingsDialog" style="width: fit-content;">
     <h4 class="mdl-dialog__title">Opzioni</h4>
     <div class="mdl-dialog__content">
       <label id="switch-view-source-hidden-label" class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-view-source-hidden">
         <input type="checkbox" id="switch-view-source-hidden" class="mdl-switch__input">
         <span class="mdl-switch__label">Nascondi "Vedi Sorgente"</span>
       </label>
+
+      <hr>
+
+      <p style="font-size: 16px;">Seleziona filtro Materie predefinito</span>
+      <button id="select-def-filter" class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">expand_more</i>
+      </button>
+      <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="select-def-filter">
+        <li class="mdl-menu__item" onclick="localStorage.setItem('def_filter', '1quad');">Primo quadrimestre</li>
+        <li class="mdl-menu__item" onclick="localStorage.setItem('def_filter', '2quad');">Secondo quadrimestre</li>
+        <li class="mdl-menu__item" onclick="localStorage.setItem('def_filter', '');">Tutto</li>
+      </ul>
     </div>
     <div class="mdl-dialog__actions">
       <button type="button" class="mdl-button close">Chiudi</button>
@@ -82,6 +94,19 @@
 
           <!-- Loading -->
           <div id="nav-loading" class="mdl-spinner mdl-js-spinner white-spinner"></div>
+
+          <!-- Filter -->
+          <button id="select-filter" class="mdl-button mdl-js-button mdl-button--icon home-navigation" style="display: none;">
+            <i class="material-icons">filter_list</i>
+          </button>
+          <div class="mdl-tooltip" data-mdl-for="select-filter">
+            Filtro
+          </div>
+          <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="select-filter">
+            <li class="mdl-menu__item" onclick="fillMarerieFilter('1quad');">Primo quadrimestre</li>
+            <li class="mdl-menu__item" onclick="fillMarerieFilter('2quad');">Secondo quadrimestre</li>
+            <li class="mdl-menu__item" onclick="fillMaterie();">Tutto</li>
+          </ul>
 
           <!-- Home navigation -->
           <a class="mdl-navigation__link home-navigation" id="oggi-date-text" style="padding: 0 16px 0 0;"></a>
