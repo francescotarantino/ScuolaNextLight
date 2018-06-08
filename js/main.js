@@ -459,18 +459,18 @@ function fillAlunno() {
   if(nav_loading.MaterialSpinner) nav_loading.MaterialSpinner.start();
   var assenze_ul = $("#assenze");
   var ritardi_ul = $("#ritardi");
-  var permessi_ul = $("#permessi");
+  var uscite_ul = $("#uscite");
   var note_ul = $("#note");
   assenze_ul.empty();
   $("#assenze-loading").show();
   ritardi_ul.empty();
   $("#ritardi-loading").show();
-  permessi_ul.empty();
-  $("#permessi-loading").show();
+  uscite_ul.empty();
+  $("#uscite-loading").show();
   note_ul.empty();
   $("#note-loading").show();
 
-  var i_assenze = 0, i_ritardi = 0, i_permessi = 0, i_note = 0;
+  var i_assenze = 0, i_ritardi = 0, i_uscite = 0, i_note = 0;
 
   var assenze_fill_f = function (data) {
     var assenze = JSON.parse(data);
@@ -482,36 +482,36 @@ function fillAlunno() {
           "class": "oggi-text",
           html: [$('<span/>', {
             "class": "materia",
-            html: $.format.date(Date.parse(element.datAssenza), "dd/MM/yyyy") + ((element.datGiustificazione) ? "" : red_dot)
+            html: $.format.date(Date.parse(element.datAssenza), "dd/MM/yyyy") + ((element.datGiustificazione) ? "" : red_dot) + '.'
           }), $('<span/>', {
             "class": "info",
               html: 'Registrata da ' + toTitleCase(element.registrataDa).replace("(", "").replace(")", "")
           })]
         }).appendTo(assenze_ul);
-      } else if (element.tipo == "R") {
+      } else if (element.codEvento == "R") {
         i_ritardi++;
         $('<div/>', {
           "class": "oggi-text",
           html: [$('<span/>', {
             "class": "materia",
-            text: $.format.date(Date.parse(element.datRitardo), "dd/MM/yyyy") //Not tested
+            text: $.format.date(Date.parse(element.datAssenza), "dd/MM/yyyy") //TODO: Da testare
           }), $('<span/>', {
             "class": "info",
-              html: 'Registrata da ' + toTitleCase(element.registrataDa).replace("(", "").replace(")", "")
+              html: 'Registrata da ' + toTitleCase(element.registrataDa).replace("(", "").replace(")", "") + '.'
           })]
         }).appendTo(ritardi_ul);
-      } else if (element.tipo == "P") {
-        i_permessi++;
+      } else if (element.codEvento == "U") {
+        i_uscite++;
         $('<div/>', {
           "class": "oggi-text",
           html: [$('<span/>', {
             "class": "materia",
-            text: $.format.date(Date.parse(element.datPermesso), "dd/MM/yyyy") //Not tested
+            text: $.format.date(Date.parse(element.datAssenza), "dd/MM/yyyy")
           }), $('<span/>', {
             "class": "info",
-              html: 'Registrata da ' + toTitleCase(element.registrataDa).replace("(", "").replace(")", "")
+              html: 'Uscita in ' + element.numOra + '<sup>a</sup> ora registrata da ' + toTitleCase(element.registrataDa).replace("(", "").replace(")", "") + '.'
           })]
-        }).appendTo(permessi_ul);
+        }).appendTo(uscite_ul);
       }
     });
 
@@ -521,13 +521,13 @@ function fillAlunno() {
     if (i_ritardi == 0) {
       ritardi_ul.append("<h6>Nessun ritardo.</h5>");
     }
-    if (i_permessi == 0) {
-      permessi_ul.append("<h6>Nessun permesso.</h5>");
+    if (i_uscite == 0) {
+      uscite_ul.append("<h6>Nessuna uscita.</h5>");
     }
 
     $("#assenze-loading").hide();
     $("#ritardi-loading").hide();
-    $("#permessi-loading").hide();
+    $("#uscite-loading").hide();
   };
 
   var f_assenze = function () {
@@ -621,12 +621,12 @@ function fillAlunno() {
 
           $("#assenze-loading").hide();
           $("#ritardi-loading").hide();
-          $("#permessi-loading").hide();
+          $("#uscite-loading").hide();
           $("#note-loading").hide();
           nav_loading.MaterialSpinner.stop();
           assenze_ul.append("<h6>Errore di rete.</h5>");
           ritardi_ul.append("<h6>Errore di rete.</h5>");
-          permessi_ul.append("<h6>Errore di rete.</h5>");
+          uscite_ul.append("<h6>Errore di rete.</h5>");
           note_ul.append("<h6>Errore di rete.</h5>");
         }
         break;
@@ -644,12 +644,12 @@ function fillAlunno() {
 
         $("#assenze-loading").hide();
         $("#ritardi-loading").hide();
-        $("#permessi-loading").hide();
+        $("#uscite-loading").hide();
         $("#note-loading").hide();
         nav_loading.MaterialSpinner.stop();
         assenze_ul.append("<h6>Errore di rete.</h5>");
         ritardi_ul.append("<h6>Errore di rete.</h5>");
-        permessi_ul.append("<h6>Errore di rete.</h5>");
+        uscite_ul.append("<h6>Errore di rete.</h5>");
         note_ul.append("<h6>Errore di rete.</h5>");
         break;
     }
