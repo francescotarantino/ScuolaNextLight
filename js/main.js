@@ -494,7 +494,7 @@ function fillAlunno() {
               html: 'Registrata da ' + toTitleCase(element.registrataDa).replace("(", "").replace(")", "")
           })]
         }).appendTo(assenze_ul);
-      } else if (element.codEvento == "R") {
+      } else if (element.codEvento == "I") {
         i_ritardi++;
         $('<div/>', {
           "class": "oggi-text",
@@ -503,7 +503,7 @@ function fillAlunno() {
             text: $.format.date(Date.parse(element.datAssenza), "dd/MM/yyyy") //TODO: Da testare
           }), $('<span/>', {
             "class": "info",
-              html: 'Registrata da ' + toTitleCase(element.registrataDa).replace("(", "").replace(")", "") + '.'
+              html: 'Ingresso in ' + element.numOra + '<sup>a</sup> ora registrata da ' + toTitleCase(element.registrataDa).replace("(", "").replace(")", "") + '.'
           })]
         }).appendTo(ritardi_ul);
       } else if (element.codEvento == "U") {
