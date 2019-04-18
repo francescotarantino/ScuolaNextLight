@@ -38,7 +38,7 @@
     }
     .mdl-layout__content {
     	padding: 24px;
-    	flex: none;
+      flex: none;
     }
     #view-source {
       position: fixed;
@@ -74,7 +74,14 @@
         <button type="button" class="mdl-button close">Chiudi</button>
       </div>
     </dialog>
-    <div class="mdl-layout mdl-js-layout mdl-color--grey-100">
+    <div class="mdl-layout mdl-js-layout mdl-color--grey-100 mdl-layout--fixed-drawer">
+      <div class="mdl-layout__drawer">
+        <span class="mdl-layout-title">ScuolaNext Light</span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link" href="/"><i class="material-icons nav-icons" role="presentation">home</i> Home</a>
+          <a class="mdl-navigation__link" href="/login.html"><i class="material-icons nav-icons" role="presentation">lock</i> Login</a>
+        </nav>
+      </div>
     	<main class="mdl-layout__content">
     		<div class="mdl-card mdl-shadow--6dp">
     			<div class="mdl-card__title mdl-color--primary mdl-color-text--white">
@@ -98,6 +105,7 @@
                 <input type="checkbox" id="rememberme" class="mdl-checkbox__input">
                 <span class="mdl-checkbox__label">Ricordami</span>
               </label>
+              <small><i class="material-icons" style="font-size: small; vertical-align: middle;">lock</i> La tua password non è trasmessa ad alcun server esterno e non viene salvata.</small>
     				</form>
     			</div>
     			<div class="mdl-card__actions mdl-card--border">

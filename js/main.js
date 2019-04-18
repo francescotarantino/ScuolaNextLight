@@ -724,16 +724,16 @@ function colore_voto (voto) {
   }
 }
 
-function fillMarerieFilter(filter){
+function fillMaterieFilter(filter){
   var def_start, def_end;
   switch (filter) {
     case '1quad':
-      def_start = new Date(2017, 09, 01, 0, 0, 0, 0).getTime()/1000;
-      def_end = new Date(2018, 01, 31, 0, 0, 0, 0).getTime()/1000;
+      def_start = new Date(2018, 09, 01, 0, 0, 0, 0).getTime()/1000;
+      def_end = new Date(2019, 01, 31, 0, 0, 0, 0).getTime()/1000;
       break;
     case '2quad':
-      def_start = new Date(2018, 02, 01, 0, 0, 0, 0).getTime()/1000;
-      def_end = new Date(2018, 06, 31, 0, 0, 0, 0).getTime()/1000;
+      def_start = new Date(2019, 02, 01, 0, 0, 0, 0).getTime()/1000;
+      def_end = new Date(2019, 06, 31, 0, 0, 0, 0).getTime()/1000;
       break;
     default:
       def_start = 0;
@@ -778,7 +778,7 @@ function switchDiv(div) {
       $(".home-navigation").hide();
       $("#select-filter").show();
       $("#update").show().attr("onclick","fillMaterie();");
-      if(localStorage.getItem('def_filter')) fillMarerieFilter(localStorage.getItem('def_filter')); else fillMaterie();
+      if(localStorage.getItem('def_filter')) fillMaterieFilter(localStorage.getItem('def_filter')); else fillMaterie();
       break;
     case 'alunno':
       $("#home-div").hide();
@@ -824,6 +824,14 @@ $('#logoutDialog .close')[0].addEventListener('click', function() {
 $('#logoutDialog .yes')[0].addEventListener('click', function() {
   logoutDialogElement.close();
   logout();
+});
+
+var infoDialogElement = $('#infoDialog')[0];
+if (!infoDialogElement.showModal) {
+  dialogPolyfill.registerDialog(infoDialogElement);
+}
+$('#infoDialog .close')[0].addEventListener('click', function() {
+  infoDialogElement.close();
 });
 
 var settingsDialogElement = $('#settingsDialog')[0];

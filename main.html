@@ -58,6 +58,18 @@
       <button type="button" class="mdl-button close">No</button>
     </div>
   </dialog>
+  <dialog class="mdl-dialog" id="infoDialog">
+    <div class="mdl-dialog__content">
+      <h4>
+        Informazioni
+      </h4>
+      Versione beta<br>
+      © <a href="https://franci22.ml" target="_blank" style="color: rgba(0,0,0,.54);">Francesco Tarantino</a>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button type="button" class="mdl-button close">Chiudi</button>
+    </div>
+  </dialog>
   <dialog class="mdl-dialog" id="settingsDialog" style="width: fit-content;">
     <h4 class="mdl-dialog__title">Opzioni</h4>
     <div class="mdl-dialog__content">
@@ -88,7 +100,6 @@
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
-        <!--<span class="mdl-layout-title">ScuolaNext Light</span>-->
         <div class="mdl-layout-spacer"></div>
         <nav class="mdl-navigation">
 
@@ -103,8 +114,8 @@
             Filtro
           </div>
           <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect" for="select-filter">
-            <li class="mdl-menu__item" onclick="fillMarerieFilter('1quad');">Primo quadrimestre</li>
-            <li class="mdl-menu__item" onclick="fillMarerieFilter('2quad');">Secondo quadrimestre</li>
+            <li class="mdl-menu__item" onclick="fillMaterieFilter('1quad');">Primo quadrimestre</li>
+            <li class="mdl-menu__item" onclick="fillMaterieFilter('2quad');">Secondo quadrimestre</li>
             <li class="mdl-menu__item" onclick="fillMaterie();">Tutto</li>
           </ul>
 
@@ -136,7 +147,7 @@
           for="menu-lower-right">
           <li class="mdl-menu__item" onclick="settingsDialogElement.showModal(); settingsInit();">Opzioni</li>
           <li id="logout" class="mdl-menu__item mdl-menu__item--full-bleed-divider" onclick="logoutDialogElement.showModal();">Logout</li>
-          <li class="mdl-menu__item">Info</li>
+          <li class="mdl-menu__item" onclick="infoDialogElement.showModal();">Info</li>
           <li class="mdl-menu__item" onclick="window.open('https://franci22.ml/contact.html')">Contattami</li>
         </ul>
       </nav>
