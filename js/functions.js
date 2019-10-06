@@ -1,4 +1,4 @@
-var x_version = "2.0.2";
+var x_version = "2.1.0";
 var x_key_app = "ax6542sdru3217t4eesd9";
 
 function request(req, headers, query, callback, network_error, undefined_error){
@@ -11,6 +11,8 @@ function request(req, headers, query, callback, network_error, undefined_error){
   request.open('GET', 'https://www.portaleargo.it/famiglia/api/rest/'+req+other, true);
   request.setRequestHeader("x-key-app", x_key_app);
   request.setRequestHeader("x-version", x_version);
+  request.setRequestHeader("x-app-code", 'APF');
+  request.setRequestHeader("x-produttore-software", 'ARGO Software s.r.l. - Ragusa');
   Object.keys(headers).forEach(function(key){
     request.setRequestHeader(key, headers[key]);
   });
